@@ -1,0 +1,12 @@
+{
+    appId: "com.folder-wizard.app",
+    productName: "Folder Wizard",
+    directories: {
+        output: "release/${version}",
+    },
+    files: ["dist/**/*", "src/electron/**/*", "package.json"],
+    win: {
+        target: ["nsis"],
+        icon: "public/favicon.ico",
+    },
+}

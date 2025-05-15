@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import "tailwindcss";
+
+* {
+    font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    background-color: #0a0a0a;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* Basit scrollbar stili */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937; /* gray-800 */
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3b3b3b; /* blue-500 */
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2563eb; /* blue-600 */
+}
+
+::-webkit-scrollbar-corner {
+    background: #1f2937; /* gray-800 */
+}
+
+/* Firefox için scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #292929; /* blue-500 gray-800 */
+}
+
+@layer components {
+    .page {
+        @apply bg-gray-900 w-full h-screen flex flex-col items-center justify-center;
+    }
+}
