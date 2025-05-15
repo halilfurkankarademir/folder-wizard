@@ -58,8 +58,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
         ipcRenderer.send("minimize-window");
     },
 
-    fullscreenWindow: () => {
-        ipcRenderer.send("fullscreen-window");
+    maximizeWindow: () => {
+        ipcRenderer.send("maximize-window");
     },
 
     closeWindow: () => {

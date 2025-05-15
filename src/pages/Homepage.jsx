@@ -35,17 +35,21 @@ export default function Homepage() {
     }, [navigate]);
 
     return (
-        <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center pt-16 pb-24 relative overflow-hidden">
+        <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center relative overflow-hidden">
             {/* Büyülü Arkaplan Efektleri */}
             <MagicBackground />
+
             {/* Ana İçerik */}
             <div className="z-10 text-center px-10 max-w-md">
                 {/* Logo */}
                 <div className="mb-10">
-                    <h1 className="text-5xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-400">
+                    <h1
+                        className="text-6xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-400 leading-24"
+                        style={{ fontFamily: "Henny Penny" }}
+                    >
                         Folder Wizard
                     </h1>
-                    <p className="text-zinc-400 mt-2 text-sm">
+                    <p className="text-zinc-400  text-sm">
                         Dosyalarınızı sihirle organize edin
                     </p>
                 </div>

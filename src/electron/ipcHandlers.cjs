@@ -20,16 +20,6 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
-    ipcMain.on("fullscreen-window", () => {
-        if (mainWindow) {
-            if (mainWindow.isMaximized()) {
-                mainWindow.unmaximize();
-            } else {
-                mainWindow.maximize();
-            }
-        }
-    });
-
     ipcMain.on("close-window", () => {
         if (mainWindow) {
             mainWindow.close();
@@ -39,7 +29,9 @@ async function setupIPCHandlers(mainWindow) {
     // Klasör içeriğini listeleme
     ipcMain.on("list-folder", async (event, folderPath) => {
         try {
-            const items = fs.readdirSync(folderPath, { withFileTypes: true });
+            const items = await fs.promises.readdir(folderPath, {
+                withFileTypes: true,
+            });
             const filesAndFolders = items.map((item) => ({
                 name: item.name,
                 path: path.join(folderPath, item.name),
@@ -53,6 +45,7 @@ async function setupIPCHandlers(mainWindow) {
                 path: folderPath,
             });
         } catch (error) {
+            console.error("Klasör okuma hatası:", error);
             mainWindow.webContents.send("list-folder-response", {
                 success: false,
                 error: error.message,
@@ -69,9 +62,23 @@ async function setupIPCHandlers(mainWindow) {
             });
 
             if (!result.canceled && result.filePaths.length > 0) {
+                const folderPath = result.filePaths[0];
+
+                // Seçilen klasörün içeriğini oku
+                const items = await fs.promises.readdir(folderPath, {
+                    withFileTypes: true,
+                });
+                const filesAndFolders = items.map((item) => ({
+                    name: item.name,
+                    path: path.join(folderPath, item.name),
+                    isDirectory: item.isDirectory(),
+                    isFile: item.isFile(),
+                }));
+
                 mainWindow.webContents.send("folder-dialog-response", {
                     success: true,
-                    path: result.filePaths[0],
+                    path: folderPath,
+                    data: filesAndFolders,
                 });
             } else {
                 mainWindow.webContents.send("folder-dialog-response", {
@@ -80,6 +87,7 @@ async function setupIPCHandlers(mainWindow) {
                 });
             }
         } catch (error) {
+            console.error("Klasör diyaloğu hatası:", error);
             mainWindow.webContents.send("folder-dialog-response", {
                 success: false,
                 error: error.message,
@@ -141,6 +149,7 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
+    // Harici linkler
     ipcMain.on("open-github", () => {
         shell.openExternal(
             "https://github.com/halilfurkankarademir/folder-wizard"

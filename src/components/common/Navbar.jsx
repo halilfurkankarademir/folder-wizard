@@ -18,7 +18,7 @@ const Navbar = () => {
     };
 
     const handleClickFullscreen = () => {
-        window.electronAPI?.fullscreenWindow();
+        window.electronAPI?.maximizeWindow();
     };
 
     const handleClickClose = () => {
@@ -44,9 +44,6 @@ const Navbar = () => {
                             <MdArrowBack className="w-5 h-5" />
                         </button>
                     )}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 font-medium">
-                        Folder Wizard
-                    </span>
                 </div>
             </div>
             <div className="flex items-center space-x-4">
