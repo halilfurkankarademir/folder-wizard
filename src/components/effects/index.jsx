@@ -1,7 +1,7 @@
-import ParticleEffect from "./ParticleEffect";
 import MagicGlowEffect from "./MagicGlowEffect";
+import ParticleEffect from "./ParticleEffect";
 
-export { ParticleEffect, MagicGlowEffect };
+export { MagicGlowEffect, ParticleEffect };
 
 // Tüm efektleri içeren bir bileşen
 const MagicBackground = () => {

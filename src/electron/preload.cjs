@@ -46,14 +46,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
         ipcRenderer.send("open-folder-dialog");
     },
 
-    openGithub: () => {
-        ipcRenderer.send("open-github");
-    },
-
-    openLinkedin: () => {
-        ipcRenderer.send("open-linkedin");
-    },
-
     minimizeWindow: () => {
         ipcRenderer.send("minimize-window");
     },
@@ -64,5 +56,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
     closeWindow: () => {
         ipcRenderer.send("close-window");
+    },
+
+    openLink: (link) => {
+        ipcRenderer.send("open-link", link);
+    },
+
+    createFolder: (folderPath, folderName) => {
+        ipcRenderer.send("make-folder", folderPath, folderName);
+    },
+
+    organiseFiles: (files, currentPath) => {
+        console.log(files, currentPath);
+        ipcRenderer.send("organise-files", files, currentPath);
     },
 });

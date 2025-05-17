@@ -1,8 +1,9 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, globalShortcut } = require("electron");
 const path = require("path");
 const { setupIPCHandlers } = require("./ipcHandlers.cjs");
 
 let mainWindow;
+const isDev = process.env.NODE_ENV === "development";
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -18,11 +19,8 @@ function createWindow() {
         },
     });
 
-    const isDev = process.env.NODE_ENV === "development";
-
     if (isDev) {
         mainWindow.loadURL("http://localhost:5173");
-        mainWindow.webContents.openDevTools();
     } else {
         mainWindow.loadFile(path.join(__dirname, "../../dist/index.html"));
     }
@@ -33,6 +31,7 @@ function createWindow() {
 app.whenReady().then(() => {
     createWindow();
 
+    // Initialize ipc handler functions
     setupIPCHandlers(mainWindow);
 
     app.on("activate", () => {
@@ -40,6 +39,13 @@ app.whenReady().then(() => {
             createWindow();
         }
     });
+
+    // It opens dev tools when CTRL+D pressed.
+    if (isDev) {
+        globalShortcut.register("CommandOrControl+D", () => {
+            mainWindow.webContents.openDevTools();
+        });
+    }
 });
 
 app.on("window-all-closed", () => {

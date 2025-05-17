@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaFolder, FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import MagicBackground from "../components/effects";
+import RoundedButton from "../components/ui/buttons/RoundedButton";
 
 export default function Homepage() {
     const [loading, setLoading] = useState(false);
@@ -54,24 +55,10 @@ export default function Homepage() {
                     </p>
                 </div>
 
-                <button
+                <RoundedButton
+                    hasClicked={loading}
                     onClick={openFolderDialog}
-                    disabled={loading}
-                    className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-all duration-300 flex items-center gap-2 mx-auto font-medium shadow-lg shadow-purple-900/20"
-                >
-                    {loading ? (
-                        <span className="flex items-center gap-2">
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            <span>Yükleniyor</span>
-                        </span>
-                    ) : (
-                        <>
-                            <FaFolder className="text-sm" />
-                            <span>Klasör Seç</span>
-                            <FaChevronRight className="text-xs opacity-70" />
-                        </>
-                    )}
-                </button>
+                />
 
                 <p className="mt-10 text-xs text-zinc-500">
                     Tüm dosya işlemleri yerel olarak gerçekleştirilir

@@ -1,5 +1,6 @@
 {
     appId: "com.folder-wizard.app",
+    author: "Halil Furkan Karademir"
     productName: "Folder Wizard",
     directories: {
         output: "release/${version}",

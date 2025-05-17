@@ -1,23 +1,27 @@
 import { BsGithub, BsLinkedin } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
     const handleClickGithub = () => {
-        window.electronAPI?.openGithub?.();
+        window.electronAPI?.openLink?.(
+            "https://github.com/halilfurkankarademir/folder-wizard"
+        );
     };
 
     const handleClickLinkedin = () => {
-        window.electronAPI?.openLinkedin?.();
+        window.electronAPI?.openLink?.(
+            "https://linkedin.com/in/halilfurkankarademir/"
+        );
+    };
+
+    const handleClickLicense = () => {
+        window.electronAPI?.openLink?.(
+            "https://github.com/halilfurkankarademir/folder-wizard/blob/main/LICENSE"
+        );
     };
 
     return (
-        <footer
-            className="fixed bottom-0 left-0 right-0 py-3 px-4 md:px-8 z-50"
-            style={{
-                background: "rgba(13, 13, 15, 0.85)",
-                backdropFilter: "blur(12px)",
-                borderTop: "1px solid rgba(82, 13, 140, 0.2)",
-            }}
-        >
+        <footer className="fixed bottom-0 left-0 right-0 py-3 px-4 md:px-8 z-50 backdrop-blur-sm">
             <div className="max-w-full mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="flex items-center space-x-6 mb-3 md:mb-0">
@@ -42,24 +46,18 @@ const Footer = () => {
                             &copy; {new Date().getFullYear()} Folder Wizard
                         </p>
                         <div className="flex justify-center md:justify-end space-x-4 text-xs text-zinc-500">
-                            <a
-                                href="#"
+                            <Link
+                                to={"/privacy"}
                                 className="hover:text-purple-400 transition-colors"
                             >
                                 Gizlilik
-                            </a>
-                            <a
-                                href="#"
-                                className="hover:text-purple-400 transition-colors"
-                            >
-                                Şartlar
-                            </a>
-                            <a
-                                href="#"
+                            </Link>
+                            <Link
+                                onClick={handleClickLicense}
                                 className="hover:text-purple-400 transition-colors"
                             >
                                 Lisans
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

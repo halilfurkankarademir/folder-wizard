@@ -1,13 +1,17 @@
+import { useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { FaRegWindowMinimize } from "react-icons/fa";
 import { LuFullscreen } from "react-icons/lu";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContex";
 
 const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isHomePage = location.pathname === "/";
+
+    const { activeLanguage, setActiveLanguage } = useLanguage();
 
     const handleClickBack = () => {
         navigate("/");
@@ -26,15 +30,8 @@ const Navbar = () => {
     };
 
     return (
-        <header
-            className="w-full flex justify-between p-3 gap-4 fixed top-0 left-0 z-50"
-            style={{
-                background: "rgba(13, 13, 15, 0.85)",
-                backdropFilter: "blur(12px)",
-                borderBottom: "1px solid rgba(82, 13, 140, 0.2)",
-            }}
-        >
-            <div className="flex items-center">
+        <nav className="w-full flex justify-between p-3  fixed top-0 left-0 z-50 draggable backdrop-blur-sm">
+            <div className="flex items-center no-drag">
                 <div className="flex items-center gap-2">
                     {!isHomePage && (
                         <button
@@ -46,7 +43,15 @@ const Navbar = () => {
                     )}
                 </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6 no-drag">
+                <button
+                    className="text-zinc-500 hover:text-purple-400 transition-colors"
+                    onClick={() =>
+                        setActiveLanguage(activeLanguage === "tr" ? "en" : "tr")
+                    }
+                >
+                    {activeLanguage === "tr" ? "EN" : "TR"}
+                </button>
                 <button
                     onClick={handleClickMinimize}
                     className="text-zinc-500 hover:text-purple-400 transition-colors"
@@ -61,12 +66,12 @@ const Navbar = () => {
                 </button>
                 <button
                     onClick={handleClickClose}
-                    className="text-zinc-500 hover:text-purple-400 transition-colors"
+                    className="text-zinc-500 hover:text-red-400 transition-colors"
                 >
                     <CgClose className="w-5 h-5" />
                 </button>
             </div>
-        </header>
+        </nav>
     );
 };
 

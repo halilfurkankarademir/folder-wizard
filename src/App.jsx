@@ -4,18 +4,26 @@ import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import SelectedFolders from "./pages/SelectedFolders";
 import SuggestedOrganisation from "./pages/SuggestedOrganisation";
+import { LanguageProvider } from "./context/LanguageContex";
+import PrivacyPage from "./pages/PrivacyPage";
 
 function App() {
     return (
-        <HashRouter>
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Homepage />} />
-                <Route path="/selected" element={<SelectedFolders />} />
-                <Route path="/suggested" element={<SuggestedOrganisation />} />
-            </Routes>
-            <Footer />
-        </HashRouter>
+        <LanguageProvider>
+            <HashRouter>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Homepage />} />
+                    <Route path="/selected" element={<SelectedFolders />} />
+                    <Route
+                        path="/suggested"
+                        element={<SuggestedOrganisation />}
+                    />
+                    <Route path="/privacy" element={<PrivacyPage />} />
+                </Routes>
+                <Footer />
+            </HashRouter>
+        </LanguageProvider>
     );
 }
 

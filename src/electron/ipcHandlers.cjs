@@ -1,6 +1,11 @@
 const { ipcMain, dialog, shell } = require("electron");
 const fs = require("fs");
 const path = require("path");
+const {
+    createFolder,
+    organiseFiles,
+    organiseFilesWithMove,
+} = require("./fileOrganizer.cjs");
 
 async function setupIPCHandlers(mainWindow) {
     // Window controls
@@ -95,6 +100,20 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
+    ipcMain.on("organise-files", async (event, files, currentPath) => {
+        try {
+            await organiseFiles(files, currentPath);
+            mainWindow.webContents.send("organise-files-response", {
+                success: true,
+            });
+        } catch (error) {
+            mainWindow.webContents.send("organise-files-response", {
+                success: false,
+                error: error.message,
+            });
+        }
+    });
+
     // Dosya taşıma
     ipcMain.on("move-file", async (event, { source, destination }) => {
         try {
@@ -113,9 +132,9 @@ async function setupIPCHandlers(mainWindow) {
     });
 
     // Klasör oluşturma
-    ipcMain.on("make-folder", async (event, folderPath) => {
+    ipcMain.on("make-folder", async (event, folderPath, folderName) => {
         try {
-            fs.mkdirSync(folderPath, { recursive: true });
+            await createFolder(folderPath, folderName);
             mainWindow.webContents.send("make-folder-response", {
                 success: true,
                 path: folderPath,
@@ -150,14 +169,8 @@ async function setupIPCHandlers(mainWindow) {
     });
 
     // Harici linkler
-    ipcMain.on("open-github", () => {
-        shell.openExternal(
-            "https://github.com/halilfurkankarademir/folder-wizard"
-        );
-    });
-
-    ipcMain.on("open-linkedin", () => {
-        shell.openExternal("https://linkedin.com/in/halilfurkankarademir");
+    ipcMain.on("open-link", (event, link) => {
+        shell.openExternal(link);
     });
 }
 

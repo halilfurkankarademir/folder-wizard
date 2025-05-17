@@ -52,7 +52,7 @@ export default function SelectedFolders() {
     const handleAnalyzeButton = () => {
         if (newFiles.length > 0) {
             navigate("/suggested", {
-                state: { suggestedFileOrg: newFiles },
+                state: { suggestedFileOrg: newFiles, currentPath: path },
             });
         }
     };

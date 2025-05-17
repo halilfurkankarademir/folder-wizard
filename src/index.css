@@ -9,7 +9,7 @@
 }
 
 body {
-    overflow: hidden;
+    overflow: auto;
     -webkit-tap-highlight-color: transparent;
     background-color: #0a0a0a;
 }
@@ -47,6 +47,14 @@ button {
 * {
     scrollbar-width: thin;
     scrollbar-color: #9a9a9a #292929; /* blue-500 gray-800 */
+}
+
+.draggable {
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    -webkit-app-region: no-drag;
 }
 
 @layer components {

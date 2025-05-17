@@ -2,12 +2,14 @@ import { FaFolder, FaArrowLeft, FaCheck, FaMagic } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import MagicBackground from "../components/effects";
+import FoldersOrganising from "../components/ui/animations/FoldersOrganising";
 
 const SuggestedOrganisation = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
-    const { suggestedFileOrg } = state || {};
+    const { suggestedFileOrg, currentPath } = state || {};
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [hasOrganised, setHasOrganised] = useState(false);
 
     const toggleFileSelection = (fileIndex) => {
         if (selectedFiles.includes(fileIndex)) {
@@ -17,9 +19,16 @@ const SuggestedOrganisation = () => {
         }
     };
 
-    const applyChanges = () => {
-        // window.electronAPI.applyChanges....
-        alert("Değişiklikler uygulanacak!");
+    const applyChanges = async () => {
+        try {
+            await window.electronAPI?.organiseFiles(
+                suggestedFileOrg,
+                currentPath
+            );
+            setHasOrganised(true);
+        } catch (error) {
+            console.error("Organizasyon hatası:", error);
+        }
     };
 
     // This effect is to set all files as selected when suggestedFileOrg changes.
@@ -28,6 +37,10 @@ const SuggestedOrganisation = () => {
             setSelectedFiles(suggestedFileOrg.map((_, index) => index));
         }
     }, [suggestedFileOrg]);
+
+    if (hasOrganised) {
+        return <FoldersOrganising />;
+    }
 
     if (!suggestedFileOrg || suggestedFileOrg.length === 0) {
         return (
