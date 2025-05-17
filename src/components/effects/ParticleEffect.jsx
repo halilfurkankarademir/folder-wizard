@@ -9,6 +9,7 @@ const ParticleEffect = () => {
 
     return (
         <Particles
+            className="opacity-30"
             id="tsparticles"
             init={particlesInit}
             options={{

@@ -5,28 +5,35 @@ import getResponseFromAI from "../services/aiService";
 import { useLocation, useNavigate } from "react-router-dom";
 import prompts from "../utils/constans/prompts";
 import MagicBackground from "../components/effects";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../context/LanguageContex";
 
 export default function SelectedFolders() {
+    const { t } = useTranslation();
     const { state } = useLocation();
     const navigate = useNavigate();
+
     const { path, files } = state || {};
+
     const [error, setError] = useState(null);
     const [newFiles, setNewFiles] = useState([]);
     const [analyzing, setAnalyzing] = useState(true);
+
+    const { activeLanguage } = useLanguage();
 
     if (!path || !files) {
         return (
             <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center ">
                 <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-8 max-w-md">
                     <p className="text-center text-lg mb-4 text-zinc-300">
-                        Geçersiz erişim. Lütfen anasayfaya dönün.
+                        {t("selectedFoldersPage.unauthorizedAccess")}
                     </p>
                     <button
                         onClick={() => navigate("/")}
                         className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-all duration-300 flex items-center justify-center gap-2 mx-auto font-medium"
                     >
                         <FaArrowLeft />
-                        <span>Anasayfaya Dön</span>
+                        <span>{t("selectedFoldersPage.backToHomepage")}</span>
                     </button>
                 </div>
             </div>
@@ -35,7 +42,8 @@ export default function SelectedFolders() {
 
     const analyzeWithAI = async () => {
         try {
-            const prompt = prompts["tr"];
+            console.log(activeLanguage);
+            const prompt = prompts[activeLanguage];
             const newFoldersData = await getResponseFromAI(
                 `${prompt} ${JSON.stringify(files)}`
             );
@@ -44,7 +52,7 @@ export default function SelectedFolders() {
                 setAnalyzing(false);
             }
         } catch (err) {
-            setError("AI analizinde hata oluştu");
+            setError(t("errors.aiAnalyzerError"));
             setAnalyzing(false);
         }
     };
@@ -68,7 +76,7 @@ export default function SelectedFolders() {
                     <MagicBackground />
                     <FaMagic className="animate-spin text-3xl mb-4 text-purple-500" />
                     <h2 className="text-xl font-light animate-pulse">
-                        Dosyalar analiz ediliyor...
+                        {t("selectedFoldersPage.analyzingFiles")}
                     </h2>
                 </div>
             ) : (
@@ -79,7 +87,7 @@ export default function SelectedFolders() {
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                             <div className="mb-4">
                                 <h1 className="text-2xl md:text-3xl font-light mb-2">
-                                    Seçilen Klasör
+                                    {t("selectedFoldersPage.selectedFolder")}
                                 </h1>
                                 <p className="text-zinc-500 font-mono text-sm bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
                                     {path}
@@ -94,12 +102,20 @@ export default function SelectedFolders() {
                                     {analyzing ? (
                                         <>
                                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                            <span>İşleniyor...</span>
+                                            <span>
+                                                {t(
+                                                    "selectedFoldersPage.processing"
+                                                )}
+                                            </span>
                                         </>
                                     ) : (
                                         <>
                                             <FaArrowRight />
-                                            <span>Önerileri Göster</span>
+                                            <span>
+                                                {t(
+                                                    "selectedFoldersPage.showSuggestions"
+                                                )}
+                                            </span>
                                         </>
                                     )}
                                 </button>
@@ -118,7 +134,7 @@ export default function SelectedFolders() {
                     <div className="bg-zinc-900/40 rounded-xl border border-zinc-800 p-4 mb-6">
                         <div className="flex items-center mb-4">
                             <h2 className="text-xl font-light">
-                                Klasördeki Dosyalar
+                                {t("selectedFoldersPage.filesInFolder")}
                             </h2>
                             <span className="ml-2 px-2 py-0.5 bg-zinc-800 rounded-full text-sm border border-zinc-700">
                                 {files.length}
@@ -127,7 +143,7 @@ export default function SelectedFolders() {
 
                         {files.length === 0 ? (
                             <p className="text-zinc-500 italic">
-                                Dosya bulunamadı
+                                {t("errors.fileNotFound")}
                             </p>
                         ) : (
                             <div className="max-h-[calc(100vh-350px)] overflow-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">

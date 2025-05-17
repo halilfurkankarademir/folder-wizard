@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaFolder, FaCheck, FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +7,8 @@ const FoldersOrganising = () => {
     const [done, setDone] = useState(false);
 
     const navigate = useNavigate();
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         const timer = setTimeout(() => setDone(true), 5000); // 5 saniye
@@ -32,20 +35,20 @@ const FoldersOrganising = () => {
                         </div>
                     </div>
                     <h2 className="text-xl font-light tracking-wide text-zinc-300">
-                        Dosyalar Organize Ediliyor...
+                        {t("foldersOrganizing")}
                     </h2>
                 </>
             ) : (
                 <div className="flex flex-col items-center space-y-4">
                     <FaCheck className="text-6xl text-green-400" />
                     <h2 className="text-xl font-semibold text-green-400 tracking-wide">
-                        Organizasyon Tamamlandı!
+                        {t("organizationCompleted")}
                     </h2>
                     <button
                         className="mt-2 px-3 py-3 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-all duration-300 flex items-center justify-center gap-2 mx-auto font-medium"
                         onClick={() => navigate("/")}
                     >
-                        Ana Sayfaya Dön
+                        {t("backToHomepage")}
                     </button>
                 </div>
             )}

@@ -1,38 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import MagicBackground from "../components/effects"; // Ana sayfadakiyle aynı arkaplan
-import { FaChevronLeft } from "react-icons/fa"; // Geri butonu için ikon
+import MagicBackground from "../components/effects";
 
 export default function PrivacyPage() {
-    // useNavigate hook'u, geri butonu için gerekli
-    const navigate = useNavigate();
-
-    // Geri butonuna tıklama fonksiyonu
-    const goBack = () => {
-        navigate(-1); // Bir önceki sayfaya dön
-    };
-
-    // Google Gizlilik Politikası linkini Electron üzerinden açma
     const handleClickGooglePrivacy = (e) => {
         e.preventDefault();
         window.electronAPI?.openLink("https://policies.google.com/privacy");
-    };
-
-    // Eğer AI ilkeleri için ayrı bir link varsa
-    const handleClickGoogleAIPolicy = (e) => {
-        e.preventDefault();
-        if (window.electronAPI?.openGooglePrivacy) {
-            // openGooglePrivacy genel bir link açma fonksiyonu olarak kullanılabilir
-            // Google'ın Gemini veya AI politikaları için daha spesifik bir link bulun ve buraya ekleyin
-            window.electronAPI.openGooglePrivacy(
-                "https://gemini.google.com/terms"
-            ); // Örnek link, doğrusunu bulun
-        } else {
-            window.open(
-                "https://gemini.google.com/terms",
-                "_blank",
-                "noopener,noreferrer"
-            ); // Örnek link
-        }
     };
 
     return (

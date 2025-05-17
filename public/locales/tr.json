@@ -1,0 +1,42 @@
+{
+    "homepage" : {
+        "subtitle" : "Dosyalarınız sihirle düzene girsin."
+    },
+    "footer" : {
+        "privacy" : "Gizlilik",
+        "license" : "Lisans"
+    },
+    "selectedFoldersPage" : {
+        "analyzingFiles" : "Dosyalar analiz ediliyor...",
+        "unauthorizedAccess" : "Geçersiz erişim. Lütfen anasayfaya dönün.",
+        "backToHomepage" : "Anasayfaya Dön",
+        "selectedFolder" : "Seçilen Klasör",
+        "processing" : "İşleniyor...",
+        "showSuggestions" : "Önerileri Göster",
+        "filesInFolder" : "Klasördeki Dosyalar"
+    },
+    "suggestedFoldersPage" : {
+        "title" : "Önerilen Düzenleme",
+        "suggestedOrganisation" : "Dosyalarınız için önerilen düzenleme",
+        "thereIsNoSuggestions" : "Henüz öneri bulunmuyor veya geçersiz erişim.",
+        "backToHomepage" : "Anasayfaya Dön",
+        "makeTheMagic" : "Sihri Gerçekleştir"
+    },
+    "settings" : {
+        "settings" : "Ayarlar",
+        "title" : "Ayarlar",
+        "language" : "Dil",
+        "about" : "Hakkında",
+        "copyright" : "2025 © Folder Wizard, Tüm hakları saklıdır."
+    },
+    "errors" : {
+        "aiAnalyzerError" : "AI analizinde bir hata oluştu.",
+        "fileNotFound" : "Dosya bulunamadı.",
+        "organizationError" : "Düzenleme sırasında bir hata oluştu."
+    },
+    "selectFolder" : "Klasör Seç",
+    "loading" : "Yükleniyor...",
+    "foldersOrganizing" : "Dosyalar Organize Ediliyor...",
+    "organizationCompleted" : "Düzenleme Tamamlandı.",
+    "backToHomepage" : "Anasayfaya Dön"
+}

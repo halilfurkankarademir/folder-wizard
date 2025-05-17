@@ -1,7 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaChevronRight, FaFolder } from "react-icons/fa";
 
 const RoundedButton = ({ hasClicked, onClick }) => {
+    const { t } = useTranslation();
+
     return (
         <button
             onClick={onClick}
@@ -13,12 +16,12 @@ const RoundedButton = ({ hasClicked, onClick }) => {
                 {hasClicked ? (
                     <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        <span>Yükleniyor</span>
+                        <span>{t("loading")}</span>
                     </>
                 ) : (
                     <>
                         <FaFolder className="text-sm" />
-                        <span>Klasör Seç</span>
+                        <span className="text-sm">{t("selectFolder")}</span>
                         <FaChevronRight className="text-xs opacity-70" />
                     </>
                 )}

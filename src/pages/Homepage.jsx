@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { FaFolder, FaChevronRight } from "react-icons/fa";
+import { FaFolder, FaChevronRight, FaCog } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import MagicBackground from "../components/effects";
 import RoundedButton from "../components/ui/buttons/RoundedButton";
+import { useTranslation } from "react-i18next";
 
 export default function Homepage() {
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const openFolderDialog = () => {
         if (window.electronAPI?.openFolderDialog) {
@@ -19,6 +22,7 @@ export default function Homepage() {
         if (window.electronAPI) {
             const handleResponse = (response) => {
                 setLoading(false);
+                if (response.error) setError(response.error);
                 if (response.success && response.data) {
                     navigate("/selected", {
                         state: {
@@ -43,26 +47,40 @@ export default function Homepage() {
             {/* Ana İçerik */}
             <div className="z-10 text-center px-10 max-w-md">
                 {/* Logo */}
-                <div className="mb-10">
+                <div className="mb-6">
                     <h1
                         className="text-6xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-400 leading-24"
                         style={{ fontFamily: "Henny Penny" }}
                     >
                         Folder Wizard
                     </h1>
-                    <p className="text-zinc-400  text-sm">
-                        Dosyalarınızı sihirle organize edin
+                    <p className="text-zinc-400 text-sm">
+                        {t("homepage.subtitle")}
                     </p>
                 </div>
 
-                <RoundedButton
-                    hasClicked={loading}
-                    onClick={openFolderDialog}
-                />
+                <div className="space-y-4">
+                    <RoundedButton
+                        hasClicked={loading}
+                        onClick={openFolderDialog}
+                    />
 
-                <p className="mt-10 text-xs text-zinc-500">
-                    Tüm dosya işlemleri yerel olarak gerçekleştirilir
-                </p>
+                    <button
+                        onClick={() => navigate("/settings")}
+                        className="text-zinc-400 hover:text-purple-400 transition-colors flex items-center justify-center gap-2 mx-auto mt-6"
+                    >
+                        <FaCog className="w-4 h-4" />
+                        <span className="text-sm">
+                            {t("settings.settings")}
+                        </span>
+                    </button>
+                </div>
+
+                {error && (
+                    <p className="mt-8 text-red-500 text-sm font-semibold">
+                        {error}
+                    </p>
+                )}
             </div>
         </div>
     );

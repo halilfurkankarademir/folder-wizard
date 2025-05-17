@@ -2,6 +2,9 @@ const fs = require("fs-extra");
 const path = require("path");
 const pLimit = require("p-limit").default;
 
+// Allowed file count to be organised
+const ALLOWED_FILE_COUNT = 100;
+
 // Allow 5 files to be moved at a time
 const limit = pLimit(5);
 
@@ -18,7 +21,6 @@ async function organiseFiles(files, currentPath) {
         const movePromises = files.map((file) =>
             limit(async () => {
                 const { fileName, targetFolder } = file;
-
                 // Folder path where file will be moved
                 const targetFolderPath = path.join(currentPath, targetFolder);
 
@@ -38,6 +40,7 @@ async function organiseFiles(files, currentPath) {
                 await fs.move(sourceFilePath, destinationFilePath, {
                     overwrite: true,
                 });
+                console.log("Files moved successfully.");
             })
         );
 
@@ -50,4 +53,28 @@ async function organiseFiles(files, currentPath) {
     }
 }
 
-module.exports = { organiseFiles };
+async function listFiles(dir) {
+    let results = [];
+
+    const files = await fs.readdir(dir, { withFileTypes: true });
+
+    const fileCount = files.length;
+
+    if (fileCount > ALLOWED_FILE_COUNT) {
+        throw new Error(
+            `En fazla ${ALLOWED_FILE_COUNT} adet dosya organize edilebilir.`
+        );
+    }
+
+    results = await Promise.all(
+        files.map(async (file) => ({
+            name: file.name,
+            isFile: file.isFile(),
+            isDirectory: file.isDirectory(),
+        }))
+    );
+
+    return results;
+}
+
+module.exports = { organiseFiles, listFiles };

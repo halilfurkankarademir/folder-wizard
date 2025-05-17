@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
+    const { t } = useTranslation();
+
     const handleClickGithub = () => {
         window.electronAPI?.openLink?.(
             "https://github.com/halilfurkankarademir/folder-wizard"
@@ -50,13 +53,13 @@ const Footer = () => {
                                 to={"/privacy"}
                                 className="hover:text-purple-400 transition-colors"
                             >
-                                Gizlilik
+                                {t("footer.privacy")}
                             </Link>
                             <Link
                                 onClick={handleClickLicense}
                                 className="hover:text-purple-400 transition-colors"
                             >
-                                Lisans
+                                {t("footer.license")}
                             </Link>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ const {
     createFolder,
     organiseFiles,
     organiseFilesWithMove,
+    listFiles,
 } = require("./fileOrganizer.cjs");
 
 async function setupIPCHandlers(mainWindow) {
@@ -31,18 +32,10 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
-    // Klasör içeriğini listeleme
+    // Show
     ipcMain.on("list-folder", async (event, folderPath) => {
         try {
-            const items = await fs.promises.readdir(folderPath, {
-                withFileTypes: true,
-            });
-            const filesAndFolders = items.map((item) => ({
-                name: item.name,
-                path: path.join(folderPath, item.name),
-                isDirectory: item.isDirectory(),
-                isFile: item.isFile(),
-            }));
+            const filesAndFolders = await listFiles(folderPath);
 
             mainWindow.webContents.send("list-folder-response", {
                 success: true,
@@ -69,16 +62,7 @@ async function setupIPCHandlers(mainWindow) {
             if (!result.canceled && result.filePaths.length > 0) {
                 const folderPath = result.filePaths[0];
 
-                // Seçilen klasörün içeriğini oku
-                const items = await fs.promises.readdir(folderPath, {
-                    withFileTypes: true,
-                });
-                const filesAndFolders = items.map((item) => ({
-                    name: item.name,
-                    path: path.join(folderPath, item.name),
-                    isDirectory: item.isDirectory(),
-                    isFile: item.isFile(),
-                }));
+                const filesAndFolders = await listFiles(folderPath);
 
                 mainWindow.webContents.send("folder-dialog-response", {
                     success: true,
@@ -88,7 +72,6 @@ async function setupIPCHandlers(mainWindow) {
             } else {
                 mainWindow.webContents.send("folder-dialog-response", {
                     success: false,
-                    error: "İşlem iptal edildi",
                 });
             }
         } catch (error) {

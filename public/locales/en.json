@@ -1,0 +1,42 @@
+{
+    "homepage" : {
+        "subtitle" : "Files, magically organized."
+    },
+    "footer" : {
+        "privacy" : "Privacy",
+        "license" : "License"
+    },
+    "selectedFoldersPage" : {
+        "analyzingFiles" : "Folders are being analyzed...",
+        "unauthorizedAccess" : "Unauthorized access. Please return to the homepage.",
+        "backToHomepage" : "Back to Homepage",
+        "selectedFolder" : "Selected Folder",
+        "processing" : "Processing...",
+        "showSuggestions" : "Show Suggestions",
+        "filesInFolder" : "Files in Folder"
+    },
+    "suggestedFoldersPage" : {
+        "title" : "Suggested Organisation",
+        "suggestedOrganisation" : "Suggested organization for your files",
+        "thereIsNoSuggestions" : "There are no suggestions or unauthorized access.",
+        "backToHomepage" : "Back to Homepage",
+        "makeTheMagic" : "Make the Magic"
+    },
+    "settings" : {
+        "settings" : "Settings",
+        "title" : "Settings",
+        "language" : "Language",
+        "about" : "About",
+        "copyright" : "2025 © Folder Wizard, All rights reserved."
+    },
+    "errors" : {
+        "aiAnalyzerError" : "An error occurred during AI analysis.",
+        "fileNotFound" : "File not found.",
+        "organizationError" : "An error occurred during organization."
+    },
+    "selectFolder" : "Select Folder",
+    "loading" : "Loading...",
+    "foldersOrganizing" : "Folders Organizing...",
+    "organizationCompleted" : "Organization Completed.",
+    "backToHomepage" : "Back to Homepage"
+}

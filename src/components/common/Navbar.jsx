@@ -11,8 +11,6 @@ const Navbar = () => {
     const location = useLocation();
     const isHomePage = location.pathname === "/";
 
-    const { activeLanguage, setActiveLanguage } = useLanguage();
-
     const handleClickBack = () => {
         navigate("/");
     };
@@ -44,14 +42,6 @@ const Navbar = () => {
                 </div>
             </div>
             <div className="flex items-center space-x-6 no-drag">
-                <button
-                    className="text-zinc-500 hover:text-purple-400 transition-colors"
-                    onClick={() =>
-                        setActiveLanguage(activeLanguage === "tr" ? "en" : "tr")
-                    }
-                >
-                    {activeLanguage === "tr" ? "EN" : "TR"}
-                </button>
                 <button
                     onClick={handleClickMinimize}
                     className="text-zinc-500 hover:text-purple-400 transition-colors"

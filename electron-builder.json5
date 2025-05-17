@@ -1,13 +1,13 @@
 {
     appId: "com.folder-wizard.app",
-    author: "Halil Furkan Karademir"
     productName: "Folder Wizard",
     directories: {
         output: "release/${version}",
     },
+    asar: true,
     files: ["dist/**/*", "src/electron/**/*", "package.json"],
     win: {
         target: ["nsis"],
-        icon: "public/favicon.ico",
+        icon: "src/assets/images/logo.png",
     },
 }

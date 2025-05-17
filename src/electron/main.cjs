@@ -3,10 +3,11 @@ const path = require("path");
 const { setupIPCHandlers } = require("./ipcHandlers.cjs");
 
 let mainWindow;
+
 const isDev = process.env.NODE_ENV === "development";
 
 function createWindow() {
-    mainWindow = new BrowserWindow({
+    const window = new BrowserWindow({
         autoHideMenuBar: true,
         title: "Folder Wizard",
         frame: false,
@@ -20,23 +21,23 @@ function createWindow() {
     });
 
     if (isDev) {
-        mainWindow.loadURL("http://localhost:5173");
+        window.loadURL("http://localhost:5173");
     } else {
-        mainWindow.loadFile(path.join(__dirname, "../../dist/index.html"));
+        window.loadFile(path.join(__dirname, "../../dist/index.html"));
     }
 
-    return mainWindow;
+    return window;
 }
 
 app.whenReady().then(() => {
-    createWindow();
+    mainWindow = createWindow();
 
     // Initialize ipc handler functions
     setupIPCHandlers(mainWindow);
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
+            mainWindow = createWindow();
         }
     });
 

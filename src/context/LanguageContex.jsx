@@ -1,13 +1,15 @@
 import { createContext, useEffect, useState, useContext } from "react";
+import i18n from "../config/i18n";
 
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
     const [activeLanguage, setActiveLanguage] = useState(() => {
-        return localStorage.getItem("activeLanguage") || "tr";
+        return localStorage.getItem("activeLanguage") || "en";
     });
 
     const saveActiveLanguage = (lang) => {
+        setActiveLanguage(lang);
         localStorage.setItem("activeLanguage", lang);
     };
 
@@ -15,6 +17,7 @@ export const LanguageProvider = ({ children }) => {
     useEffect(() => {
         if (activeLanguage) {
             saveActiveLanguage(activeLanguage);
+            i18n.changeLanguage(activeLanguage);
         }
     }, [activeLanguage]);
 
