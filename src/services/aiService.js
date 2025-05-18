@@ -1,10 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-const aiAgent = new GoogleGenAI({ apiKey });
-
 const getResponseFromAI = async (message) => {
+    const apiKey = await window.electronAPI?.invoke("get-api-key");
+
+    let aiAgent;
+
+    if (apiKey) {
+        aiAgent = new GoogleGenAI({ apiKey });
+    }
     try {
         const response = await aiAgent.models.generateContent({
             model: "gemini-2.0-flash",

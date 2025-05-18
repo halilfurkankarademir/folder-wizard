@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import MagicBackground from "../components/effects";
 import { useLanguage } from "../context/LanguageContex";
@@ -6,6 +6,10 @@ import { useLanguage } from "../context/LanguageContex";
 const SettingsPage = () => {
     const { t, i18n } = useTranslation();
     const [language, setLanguage] = useState(i18n.language);
+    const [apiKey, setApiKey] = useState("");
+    const [savedMessage, setSavedMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [storedApiKeyExists, setStoredApiKeyExists] = useState(false);
 
     const { setActiveLanguage } = useLanguage();
 
@@ -14,6 +18,44 @@ const SettingsPage = () => {
         setActiveLanguage(newLang);
         i18n.changeLanguage(newLang);
     };
+
+    const handleSaveApiKey = async () => {
+        setErrorMessage("");
+        setSavedMessage("");
+        if (!apiKey.trim()) {
+            setErrorMessage(t("settings.apiKeyEmptyError"));
+            return;
+        }
+
+        try {
+            const response = await window.electronAPI?.invoke(
+                "set-api-key",
+                apiKey.trim()
+            );
+            if (response.error) {
+                setErrorMessage(t("settings.apiKeyInvalidError"));
+                return;
+            }
+            setSavedMessage(t("settings.apiKeySavedSuccess"));
+            setStoredApiKeyExists(true);
+            setApiKey("");
+            setTimeout(() => setSavedMessage(""), 3000);
+        } catch (err) {
+            setErrorMessage(t("settings.apiKeySaveUnexpectedError"));
+            console.error(err);
+        }
+    };
+
+    const getApiKeyFromStorage = async () => {
+        const stored = await window.electronAPI.invoke("get-api-key");
+        if (stored) {
+            setStoredApiKeyExists(true);
+        }
+    };
+
+    useEffect(() => {
+        getApiKeyFromStorage();
+    }, []);
 
     return (
         <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center">
@@ -51,6 +93,48 @@ const SettingsPage = () => {
                                 English
                             </button>
                         </div>
+                    </div>
+
+                    {/* Gemini API Key Ayarı */}
+                    <div className="mb-6">
+                        <h2 className="text-lg font-medium mb-3">
+                            {t("settings.geminiApiKey")}
+                        </h2>
+                        <div className="flex gap-3 items-center">
+                            <input
+                                type="text"
+                                value={apiKey}
+                                onChange={(e) => setApiKey(e.target.value)}
+                                placeholder={
+                                    storedApiKeyExists
+                                        ? t("settings.apiKeyPlaceholder")
+                                        : t("settings.enterGeminiApiKey")
+                                }
+                                className="bg-zinc-800 text-white px-4 py-2 rounded-lg w-full"
+                                autoComplete="off"
+                            />
+                            <button
+                                onClick={handleSaveApiKey}
+                                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-300"
+                            >
+                                {t("settings.save")}
+                            </button>
+                        </div>
+                        {storedApiKeyExists && !apiKey && (
+                            <p className="text-sm text-zinc-400 mt-1">
+                                {t("settings.apiKeyExistsMessage")}
+                            </p>
+                        )}
+                        {savedMessage && (
+                            <p className="text-sm text-green-400 mt-2">
+                                {savedMessage}
+                            </p>
+                        )}
+                        {errorMessage && (
+                            <p className="text-sm text-red-500 mt-2">
+                                {errorMessage}
+                            </p>
+                        )}
                     </div>
 
                     {/* Uygulama Bilgileri */}

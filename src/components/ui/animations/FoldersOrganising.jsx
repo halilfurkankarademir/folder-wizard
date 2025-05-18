@@ -10,6 +10,11 @@ const FoldersOrganising = () => {
 
     const { t } = useTranslation();
 
+    const handleClickUndo = async () => {
+        const response = await window.electronAPI?.invoke("undo-organisation");
+        console.log(response);
+    };
+
     useEffect(() => {
         const timer = setTimeout(() => setDone(true), 5000); // 5 saniye
 
@@ -44,6 +49,7 @@ const FoldersOrganising = () => {
                     <h2 className="text-xl font-semibold text-green-400 tracking-wide">
                         {t("organizationCompleted")}
                     </h2>
+                    <button onClick={handleClickUndo}>Geri Al</button>
                     <button
                         className="mt-2 px-3 py-3 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-all duration-300 flex items-center justify-center gap-2 mx-auto font-medium"
                         onClick={() => navigate("/")}

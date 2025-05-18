@@ -22,9 +22,35 @@ const SuggestedOrganisation = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const { suggestedFileOrg, currentPath } = state || {};
+
+    // Debug için state ve currentPath'i logla
+    console.log("State:", state);
+    console.log("Current Path:", currentPath);
+
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [hasOrganised, setHasOrganised] = useState(false);
     const [groupedFiles, setGroupedFiles] = useState({});
+
+    // currentPath kontrolü
+    if (!currentPath) {
+        console.error("Current path is missing!");
+        return (
+            <div className="w-full h-screen mt-8 bg-neutral-950 text-white flex flex-col justify-center items-center pt-16 pb-24">
+                <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-8 max-w-md">
+                    <p className="text-center text-lg mb-4 text-zinc-300">
+                        {t("suggestedFoldersPage.thereIsNoSuggestions")}
+                    </p>
+                    <button
+                        onClick={() => navigate("/")}
+                        className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-all duration-300 flex items-center justify-center gap-2 mx-auto font-medium"
+                    >
+                        <FaArrowLeft />
+                        <span>{t("suggestedFoldersPage.backToHomepage")}</span>
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     const toggleFileSelection = (fileIndex) => {
         if (selectedFiles.includes(fileIndex)) {
@@ -35,12 +61,32 @@ const SuggestedOrganisation = () => {
     };
 
     const applyChanges = async () => {
+        if (!currentPath) {
+            console.error("Current path is missing!");
+            return;
+        }
+
+        if (!suggestedFileOrg || suggestedFileOrg.length === 0) {
+            console.error("No files to organize!");
+            return;
+        }
+
         try {
-            await window.electronAPI?.organiseFiles(
-                suggestedFileOrg,
-                currentPath
+            const response = await window.electronAPI?.invoke(
+                "organise-files",
+                {
+                    files: suggestedFileOrg,
+                    currentPath: currentPath,
+                }
             );
-            setHasOrganised(true);
+
+            console.log("Organize response:", response);
+
+            if (response?.success) {
+                setHasOrganised(true);
+            } else {
+                console.error("Organization failed:", response?.error);
+            }
         } catch (error) {
             console.error(t("errors.organizationError"), error);
         }

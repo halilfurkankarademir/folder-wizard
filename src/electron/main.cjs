@@ -6,9 +6,12 @@ let mainWindow;
 
 const isDev = process.env.NODE_ENV === "development";
 
+const iconPath = path.join(__dirname, "../assets/images/logo.png");
+
 function createWindow() {
     const window = new BrowserWindow({
         autoHideMenuBar: true,
+        icon: iconPath,
         title: "Folder Wizard",
         frame: false,
         width: 800,
@@ -31,6 +34,8 @@ function createWindow() {
 
 app.whenReady().then(() => {
     mainWindow = createWindow();
+
+    mainWindow.webContents.openDevTools();
 
     // Initialize ipc handler functions
     setupIPCHandlers(mainWindow);

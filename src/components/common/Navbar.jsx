@@ -16,15 +16,15 @@ const Navbar = () => {
     };
 
     const handleClickMinimize = () => {
-        window.electronAPI?.minimizeWindow();
+        window.electronAPI?.invoke("minimize-window");
     };
 
     const handleClickFullscreen = () => {
-        window.electronAPI?.maximizeWindow();
+        window.electronAPI?.invoke("toggle-fullscreen");
     };
 
     const handleClickClose = () => {
-        window.electronAPI?.closeWindow();
+        window.electronAPI?.invoke("close-window");
     };
 
     return (

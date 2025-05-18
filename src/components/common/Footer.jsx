@@ -5,22 +5,15 @@ import { Link } from "react-router-dom";
 const Footer = () => {
     const { t } = useTranslation();
 
-    const handleClickGithub = () => {
-        window.electronAPI?.openLink?.(
-            "https://github.com/halilfurkankarademir/folder-wizard"
-        );
+    const links = {
+        github: "https://github.com/halilfurkankarademir/folder-wizard",
+        linkedin: "https://linkedin.com/in/halilfurkankarademir/",
+        license:
+            "https://github.com/halilfurkankarademir/folder-wizard/blob/main/LICENSE",
     };
 
-    const handleClickLinkedin = () => {
-        window.electronAPI?.openLink?.(
-            "https://linkedin.com/in/halilfurkankarademir/"
-        );
-    };
-
-    const handleClickLicense = () => {
-        window.electronAPI?.openLink?.(
-            "https://github.com/halilfurkankarademir/folder-wizard/blob/main/LICENSE"
-        );
+    const handleClickOpenLink = async (linkType) => {
+        await window.electronAPI?.invoke?.("open-link", links[linkType]);
     };
 
     return (
@@ -29,14 +22,14 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="flex items-center space-x-6 mb-3 md:mb-0">
                         <button
-                            onClick={handleClickGithub}
+                            onClick={() => handleClickOpenLink("github")}
                             className="text-zinc-500 hover:text-purple-400 transition-colors"
                             aria-label="GitHub"
                         >
                             <BsGithub className="w-5 h-5" />
                         </button>
                         <button
-                            onClick={handleClickLinkedin}
+                            onClick={() => handleClickOpenLink("linkedin")}
                             className="text-zinc-500 hover:text-purple-400 transition-colors"
                             aria-label="LinkedIn"
                         >
@@ -56,7 +49,7 @@ const Footer = () => {
                                 {t("footer.privacy")}
                             </Link>
                             <Link
-                                onClick={handleClickLicense}
+                                onClick={() => handleClickOpenLink("license")}
                                 className="hover:text-purple-400 transition-colors"
                             >
                                 {t("footer.license")}

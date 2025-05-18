@@ -42,7 +42,6 @@ export default function SelectedFolders() {
 
     const analyzeWithAI = async () => {
         try {
-            console.log(activeLanguage);
             const prompt = prompts[activeLanguage];
             const newFoldersData = await getResponseFromAI(
                 `${prompt} ${JSON.stringify(files)}`
@@ -58,10 +57,21 @@ export default function SelectedFolders() {
     };
 
     const handleAnalyzeButton = () => {
+        console.log("Handle Analyze - Path:", path);
+        console.log("Handle Analyze - New Files:", newFiles);
+
+        if (!path) {
+            console.error("Path is undefined!");
+            return;
+        }
+
         if (newFiles.length > 0) {
-            navigate("/suggested", {
-                state: { suggestedFileOrg: newFiles, currentPath: path },
-            });
+            const state = {
+                suggestedFileOrg: newFiles,
+                currentPath: path,
+            };
+            console.log("Navigating with state:", state);
+            navigate("/suggested", { state });
         }
     };
 

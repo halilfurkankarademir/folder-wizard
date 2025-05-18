@@ -1,22 +1,22 @@
-const { ipcMain, dialog, shell } = require("electron");
-const fs = require("fs");
-const path = require("path");
+const { ipcMain, dialog, shell, safeStorage } = require("electron");
 const {
-    createFolder,
     organiseFiles,
-    organiseFilesWithMove,
     listFiles,
+    undoLastOrganise,
 } = require("./fileOrganizer.cjs");
+const Store = require("electron-store").default;
+
+const myStore = new Store();
 
 async function setupIPCHandlers(mainWindow) {
     // Window controls
-    ipcMain.on("minimize-window", () => {
+    ipcMain.handle("minimize-window", () => {
         if (mainWindow) {
             mainWindow.minimize();
         }
     });
 
-    ipcMain.on("maximize-window", () => {
+    ipcMain.handle("toggle-fullscreen", () => {
         if (mainWindow) {
             if (mainWindow.isMaximized()) {
                 mainWindow.unmaximize();
@@ -26,34 +26,14 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
-    ipcMain.on("close-window", () => {
+    ipcMain.handle("close-window", () => {
         if (mainWindow) {
             mainWindow.close();
         }
     });
 
-    // Show
-    ipcMain.on("list-folder", async (event, folderPath) => {
-        try {
-            const filesAndFolders = await listFiles(folderPath);
-
-            mainWindow.webContents.send("list-folder-response", {
-                success: true,
-                data: filesAndFolders,
-                path: folderPath,
-            });
-        } catch (error) {
-            console.error("Klasör okuma hatası:", error);
-            mainWindow.webContents.send("list-folder-response", {
-                success: false,
-                error: error.message,
-                path: folderPath,
-            });
-        }
-    });
-
     // Klasör seçme diyaloğu
-    ipcMain.on("open-folder-dialog", async (event) => {
+    ipcMain.handle("open-folder-dialog", async () => {
         try {
             const result = await dialog.showOpenDialog(mainWindow, {
                 properties: ["openDirectory"],
@@ -61,100 +41,104 @@ async function setupIPCHandlers(mainWindow) {
 
             if (!result.canceled && result.filePaths.length > 0) {
                 const folderPath = result.filePaths[0];
-
                 const filesAndFolders = await listFiles(folderPath);
 
-                mainWindow.webContents.send("folder-dialog-response", {
+                return {
                     success: true,
                     path: folderPath,
                     data: filesAndFolders,
-                });
+                };
             } else {
-                mainWindow.webContents.send("folder-dialog-response", {
+                return {
                     success: false,
-                });
+                    message: "Kullanıcı klasör seçimini iptal etti.",
+                };
             }
         } catch (error) {
             console.error("Klasör diyaloğu hatası:", error);
-            mainWindow.webContents.send("folder-dialog-response", {
+            return {
                 success: false,
                 error: error.message,
-            });
+            };
         }
     });
 
-    ipcMain.on("organise-files", async (event, files, currentPath) => {
+    ipcMain.handle("organise-files", async (event, args) => {
         try {
-            await organiseFiles(files, currentPath);
-            mainWindow.webContents.send("organise-files-response", {
-                success: true,
-            });
-        } catch (error) {
-            mainWindow.webContents.send("organise-files-response", {
-                success: false,
-                error: error.message,
-            });
-        }
-    });
-
-    // Dosya taşıma
-    ipcMain.on("move-file", async (event, { source, destination }) => {
-        try {
-            fs.renameSync(source, destination);
-            mainWindow.webContents.send("move-file-response", {
-                success: true,
-                source,
-                destination,
-            });
-        } catch (error) {
-            mainWindow.webContents.send("move-file-response", {
-                success: false,
-                error: error.message,
-            });
-        }
-    });
-
-    // Klasör oluşturma
-    ipcMain.on("make-folder", async (event, folderPath, folderName) => {
-        try {
-            await createFolder(folderPath, folderName);
-            mainWindow.webContents.send("make-folder-response", {
-                success: true,
-                path: folderPath,
-            });
-        } catch (error) {
-            mainWindow.webContents.send("make-folder-response", {
-                success: false,
-                error: error.message,
-            });
-        }
-    });
-
-    // Dosya silme
-    ipcMain.on("delete-file", async (event, filePath) => {
-        try {
-            const stats = fs.statSync(filePath);
-            if (stats.isDirectory()) {
-                fs.rmdirSync(filePath, { recursive: true });
-            } else {
-                fs.unlinkSync(filePath);
+            const { files, currentPath } = args;
+            if (!files || !currentPath) {
+                console.error("Missing parameters:", { files, currentPath });
+                return {
+                    success: false,
+                    error: "Files or current path is missing",
+                    details: { files, currentPath },
+                };
             }
-            mainWindow.webContents.send("delete-file-response", {
-                success: true,
-                path: filePath,
-            });
+
+            const result = await organiseFiles(files, currentPath);
+
+            return result;
         } catch (error) {
-            mainWindow.webContents.send("delete-file-response", {
+            return {
                 success: false,
                 error: error.message,
-            });
+                details: { error, files, currentPath },
+            };
         }
     });
 
-    // Harici linkler
-    ipcMain.on("open-link", (event, link) => {
+    // Sets API key for gemini ai
+    ipcMain.handle("set-api-key", async (event, apiKey) => {
+        try {
+            const isValidKey = await validateGeminiApiKey(apiKey);
+            if (!isValidKey) {
+                throw new Error("API key gecersiz.");
+            }
+            const encyrptedKey = safeStorage.encryptString(apiKey);
+            myStore.set("apiKey", encyrptedKey);
+            return { success: true };
+        } catch (error) {
+            console.error("API key set error:", error);
+            return { success: false, error: error.message };
+        }
+    });
+
+    // Opens external links
+    ipcMain.handle("open-link", (event, link) => {
         shell.openExternal(link);
+    });
+
+    ipcMain.handle("get-api-key", async () => {
+        const encryptedKey = myStore.get("apiKey");
+        if (!encryptedKey) return null;
+        const decryptedKey = safeStorage.decryptString(
+            Buffer.from(encryptedKey, "base64")
+        );
+        return decryptedKey;
+    });
+
+    ipcMain.handle("undo-organisation", async () => {
+        await undoLastOrganise();
+        return { success: true };
     });
 }
 
 module.exports = { setupIPCHandlers };
+
+// Checks if the Gemini API key is valid
+async function validateGeminiApiKey(apiKey) {
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`
+        );
+        if (response.ok) {
+            return true;
+        } else {
+            console.warn("API key geçersiz:", response.status);
+            return false;
+        }
+    } catch (error) {
+        console.error("API kontrol hatası:", error);
+        return false;
+    }
+}

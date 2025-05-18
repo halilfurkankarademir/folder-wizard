@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaFolder, FaChevronRight, FaCog } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import MagicBackground from "../components/effects";
 import RoundedButton from "../components/ui/buttons/RoundedButton";
@@ -8,36 +8,41 @@ import { useTranslation } from "react-i18next";
 export default function Homepage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [canMakeRequest, setCanMakeRequest] = useState(true);
+    const [showApiKeyModal, setShowApiKeyModal] = useState(false);
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const openFolderDialog = () => {
-        if (window.electronAPI?.openFolderDialog) {
+    const openFolderDialog = async () => {
+        if (window.electronAPI) {
             setLoading(true);
-            window.electronAPI.openFolderDialog();
+            const response = await window.electronAPI.invoke(
+                "open-folder-dialog"
+            );
+            if (response.success) {
+                navigate("/selected", {
+                    state: {
+                        path: response.path,
+                        files: response.data,
+                    },
+                });
+            }
+        }
+    };
+
+    // Get API key from storage if it exists
+    const getApiKeyFromStorage = async () => {
+        const storedApiKey = await window.electronAPI.invoke("get-api-key");
+        if (!storedApiKey) {
+            setError(t("errors.apiKeyNotFound"));
+            setCanMakeRequest(false);
+            setShowApiKeyModal(true);
         }
     };
 
     useEffect(() => {
-        if (window.electronAPI) {
-            const handleResponse = (response) => {
-                setLoading(false);
-                if (response.error) setError(response.error);
-                if (response.success && response.data) {
-                    navigate("/selected", {
-                        state: {
-                            path: response.path,
-                            files: response.data,
-                        },
-                    });
-                }
-            };
-            window.electronAPI.receive(
-                "folder-dialog-response",
-                handleResponse
-            );
-        }
-    }, [navigate]);
+        getApiKeyFromStorage();
+    }, []);
 
     return (
         <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center relative overflow-hidden">
@@ -70,9 +75,7 @@ export default function Homepage() {
                         className="text-zinc-400 hover:text-purple-400 transition-colors flex items-center justify-center gap-2 mx-auto mt-6"
                     >
                         <FaCog className="w-4 h-4" />
-                        <span className="text-sm">
-                            {t("settings.settings")}
-                        </span>
+                        <span className="text-sm">{t("settings.title")}</span>
                     </button>
                 </div>
 

@@ -22,17 +22,26 @@
         "backToHomepage" : "Back to Homepage",
         "makeTheMagic" : "Make the Magic"
     },
-    "settings" : {
-        "settings" : "Settings",
-        "title" : "Settings",
-        "language" : "Language",
-        "about" : "About",
-        "copyright" : "2025 © Folder Wizard, All rights reserved."
+    "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "geminiApiKey": "Gemini API Key",
+        "enterGeminiApiKey": "Enter your API key here",
+        "apiKeyPlaceholder": "You have a saved API key, you can change it",
+        "apiKeyExistsMessage": "A saved API key exists. You can replace it by entering a new key.",
+        "save": "Save",
+        "apiKeySavedSuccess": "API key saved successfully!",
+        "apiKeyInvalidError": "Invalid API key!",
+        "apiKeyEmptyError": "API key cannot be empty!",
+        "apiKeySaveUnexpectedError": "An error occurred while saving the API key!",
+        "about": "About",
+        "copyright": "© 2025 Folder Wizard"
     },
     "errors" : {
         "aiAnalyzerError" : "An error occurred during AI analysis.",
         "fileNotFound" : "File not found.",
-        "organizationError" : "An error occurred during organization."
+        "organizationError" : "An error occurred during organization.",
+        "apiKeyNotFound" : "Gemini API key not found."
     },
     "selectFolder" : "Select Folder",
     "loading" : "Loading...",

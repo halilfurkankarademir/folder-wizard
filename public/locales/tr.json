@@ -23,16 +23,25 @@
         "makeTheMagic" : "Sihri Gerçekleştir"
     },
     "settings" : {
-        "settings" : "Ayarlar",
-        "title" : "Ayarlar",
-        "language" : "Dil",
-        "about" : "Hakkında",
-        "copyright" : "2025 © Folder Wizard, Tüm hakları saklıdır."
+        "title": "Ayarlar",
+        "language": "Dil",
+        "geminiApiKey": "Gemini API Anahtarı",
+        "enterGeminiApiKey": "API anahtarınızı buraya girin",
+        "apiKeyPlaceholder": "Kayıtlı API anahtarınız var, değiştirin",
+        "apiKeyExistsMessage": "Kayıtlı API anahtarı mevcut. Yeni bir anahtar girerek değiştirebilirsiniz.",
+        "save": "Kaydet",
+        "apiKeySavedSuccess": "API anahtarı başarıyla kaydedildi!",
+        "apiKeyInvalidError": "Geçersiz API anahtarı!",
+        "apiKeyEmptyError": "API anahtarı boş olamaz!",
+        "apiKeySaveUnexpectedError": "API anahtarı kaydederken bir hata oluştu!",
+        "about": "Hakkında",
+        "copyright": "© 2025 Folder Wizard"
     },
     "errors" : {
         "aiAnalyzerError" : "AI analizinde bir hata oluştu.",
         "fileNotFound" : "Dosya bulunamadı.",
-        "organizationError" : "Düzenleme sırasında bir hata oluştu."
+        "organizationError" : "Düzenleme sırasında bir hata oluştu.",
+        "apiKeyNotFound" : "Gemini API anahtarı bulunamadı."
     },
     "selectFolder" : "Klasör Seç",
     "loading" : "Yükleniyor...",
