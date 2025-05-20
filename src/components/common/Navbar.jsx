@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { FaRegWindowMinimize } from "react-icons/fa";
 import { LuFullscreen } from "react-icons/lu";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useLanguage } from "../../context/LanguageContex";
+import Logo from "../../assets/images/logo.png";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -30,13 +29,18 @@ const Navbar = () => {
     return (
         <nav className="w-full flex justify-between p-3  fixed top-0 left-0 z-50 draggable backdrop-blur-sm">
             <div className="flex items-center no-drag">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 no-drag">
+                    <img
+                        src={Logo}
+                        alt="Logo"
+                        className="w-10 h-10 opacity-60 hover:opacity-100 transition-opacity duration-200"
+                    />
                     {!isHomePage && (
                         <button
                             onClick={handleClickBack}
-                            className="text-zinc-400 hover:text-purple-400 transition-colors mr-2"
+                            className="text-zinc-400 hover:text-purple-400 transition-colors"
                         >
-                            <MdArrowBack className="w-5 h-5" />
+                            <MdArrowBack className="w-6 h-6" />
                         </button>
                     )}
                 </div>

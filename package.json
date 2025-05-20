@@ -1,5 +1,5 @@
 {
-  "name": "folder-wizard2",
+  "name": "folder-wizard",
   "private": true,
   "version": "0.0.0",
   "main": "src/electron/main.cjs",
@@ -16,6 +16,7 @@
     "@google/genai": "^0.14.0",
     "@tailwindcss/vite": "^4.1.7",
     "axios": "^1.9.0",
+    "electron-log": "^5.4.0",
     "electron-store": "8.1.0",
     "fs-extra": "^11.3.0",
     "i18next": "^25.1.3",

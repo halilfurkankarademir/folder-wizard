@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import MagicBackground from "../components/effects";
-import { useLanguage } from "../context/LanguageContex";
+import { useLanguage } from "../context/LanguageContext";
+import { useBgAnimation } from "../context/BgAnimationContext";
+import { useApiKey } from "../context/ApiKeyContext";
 
 const SettingsPage = () => {
     const { t, i18n } = useTranslation();
+
     const [language, setLanguage] = useState(i18n.language);
-    const [apiKey, setApiKey] = useState("");
+    const [animatedBackground, setAnimatedBackground] = useState(true);
+    const [apiKeyInput, setApiKeyInput] = useState("");
     const [savedMessage, setSavedMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [storedApiKeyExists, setStoredApiKeyExists] = useState(false);
 
     const { setActiveLanguage } = useLanguage();
+    const { setIsBgAnimationActive } = useBgAnimation();
+    const { setApiKey } = useApiKey();
 
     const handleLanguageChange = (newLang) => {
         setLanguage(newLang);
@@ -19,10 +25,16 @@ const SettingsPage = () => {
         i18n.changeLanguage(newLang);
     };
 
+    const handleChangeBackgroundAnimation = (newValue) => {
+        localStorage.setItem("animatedBackground", newValue);
+        setAnimatedBackground(newValue);
+        setIsBgAnimationActive(newValue);
+    };
+
     const handleSaveApiKey = async () => {
         setErrorMessage("");
         setSavedMessage("");
-        if (!apiKey.trim()) {
+        if (!apiKeyInput.trim()) {
             setErrorMessage(t("settings.apiKeyEmptyError"));
             return;
         }
@@ -30,7 +42,7 @@ const SettingsPage = () => {
         try {
             const response = await window.electronAPI?.invoke(
                 "set-api-key",
-                apiKey.trim()
+                apiKeyInput.trim()
             );
             if (response.error) {
                 setErrorMessage(t("settings.apiKeyInvalidError"));
@@ -38,7 +50,7 @@ const SettingsPage = () => {
             }
             setSavedMessage(t("settings.apiKeySavedSuccess"));
             setStoredApiKeyExists(true);
-            setApiKey("");
+            setApiKeyInput("");
             setTimeout(() => setSavedMessage(""), 3000);
         } catch (err) {
             setErrorMessage(t("settings.apiKeySaveUnexpectedError"));
@@ -46,19 +58,38 @@ const SettingsPage = () => {
         }
     };
 
+    const handleDeleteApiKey = async () => {
+        try {
+            const response = await window.electronAPI?.invoke("delete-api-key");
+            if (!response.success) {
+                setErrorMessage(t("settings.apiKeyDeleteError"));
+            }
+            setApiKey("");
+            setApiKeyInput("");
+            setStoredApiKeyExists(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const getApiKeyFromStorage = async () => {
         const stored = await window.electronAPI.invoke("get-api-key");
         if (stored) {
+            setApiKeyInput(stored);
             setStoredApiKeyExists(true);
         }
     };
 
     useEffect(() => {
+        const storedBackground = localStorage.getItem("animatedBackground");
+        if (storedBackground) {
+            setAnimatedBackground(storedBackground === "true");
+        }
         getApiKeyFromStorage();
     }, []);
 
     return (
-        <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center">
+        <div className="w-full min-h-screen p-12 bg-neutral-950 text-white flex flex-col justify-center items-center">
             <MagicBackground />
             <div className="container mx-auto max-w-7xl p-4 md:p-8 pt-16 pb-12">
                 <div className="bg-zinc-900/40 rounded-xl border border-zinc-800 p-6 max-w-2xl mx-auto">
@@ -66,7 +97,7 @@ const SettingsPage = () => {
                         {t("settings.title")}
                     </h1>
 
-                    {/* Dil Ayarları */}
+                    {/* Language Settings */}
                     <div className="mb-6">
                         <h2 className="text-lg font-medium mb-3">
                             {t("settings.language")}
@@ -95,6 +126,39 @@ const SettingsPage = () => {
                         </div>
                     </div>
 
+                    {/* Background Settings */}
+                    <div className="mb-6">
+                        <h2 className="text-lg font-medium mb-3">
+                            {t("settings.backgroundAnimation")}
+                        </h2>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() =>
+                                    handleChangeBackgroundAnimation(true)
+                                }
+                                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                                    animatedBackground === true
+                                        ? "bg-purple-600 text-white"
+                                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                                }`}
+                            >
+                                {t("settings.on")}
+                            </button>
+                            <button
+                                onClick={() =>
+                                    handleChangeBackgroundAnimation(false)
+                                }
+                                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                                    animatedBackground === false
+                                        ? "bg-purple-600 text-white"
+                                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                                }`}
+                            >
+                                {t("settings.off")}
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Gemini API Key Ayarı */}
                     <div className="mb-6">
                         <h2 className="text-lg font-medium mb-3">
@@ -103,13 +167,9 @@ const SettingsPage = () => {
                         <div className="flex gap-3 items-center">
                             <input
                                 type="text"
-                                value={apiKey}
-                                onChange={(e) => setApiKey(e.target.value)}
-                                placeholder={
-                                    storedApiKeyExists
-                                        ? t("settings.apiKeyPlaceholder")
-                                        : t("settings.enterGeminiApiKey")
-                                }
+                                value={apiKeyInput}
+                                onChange={(e) => setApiKeyInput(e.target.value)}
+                                placeholder="Gemini API Key"
                                 className="bg-zinc-800 text-white px-4 py-2 rounded-lg w-full"
                                 autoComplete="off"
                             />
@@ -119,8 +179,14 @@ const SettingsPage = () => {
                             >
                                 {t("settings.save")}
                             </button>
+                            <button
+                                onClick={handleDeleteApiKey}
+                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300"
+                            >
+                                {t("settings.delete")}
+                            </button>
                         </div>
-                        {storedApiKeyExists && !apiKey && (
+                        {storedApiKeyExists && !apiKeyInput && (
                             <p className="text-sm text-zinc-400 mt-1">
                                 {t("settings.apiKeyExistsMessage")}
                             </p>
@@ -144,7 +210,7 @@ const SettingsPage = () => {
                         </h2>
                         <div className="bg-zinc-800/50 rounded-lg p-4">
                             <p className="text-sm text-zinc-400">
-                                Folder Wizard v1.0.0
+                                Folder Wizard v0.0.1
                             </p>
                             <p className="text-sm text-zinc-400 mt-1">
                                 {t("settings.copyright")}

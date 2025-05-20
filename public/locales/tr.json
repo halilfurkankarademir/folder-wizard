@@ -27,25 +27,45 @@
         "language": "Dil",
         "geminiApiKey": "Gemini API Anahtarı",
         "enterGeminiApiKey": "API anahtarınızı buraya girin",
-        "apiKeyPlaceholder": "Kayıtlı API anahtarınız var, değiştirin",
+        "apiKeyPlaceholder": "Kayıtlı API anahtarınız var, değiştirmek için yenisini girin",
         "apiKeyExistsMessage": "Kayıtlı API anahtarı mevcut. Yeni bir anahtar girerek değiştirebilirsiniz.",
         "save": "Kaydet",
+        "delete": "Sil",
         "apiKeySavedSuccess": "API anahtarı başarıyla kaydedildi!",
         "apiKeyInvalidError": "Geçersiz API anahtarı!",
         "apiKeyEmptyError": "API anahtarı boş olamaz!",
         "apiKeySaveUnexpectedError": "API anahtarı kaydederken bir hata oluştu!",
+        "apiKeyDeleteError": "API anahtarı silerken bir hata oluştu!",
         "about": "Hakkında",
-        "copyright": "© 2025 Folder Wizard"
+        "copyright": "© 2025 Folder Wizard",
+        "backgroundAnimation": "Arkaplan Animasyonu",
+        "on" : "Açık",
+        "off" : "Kapalı"
+    },
+    "setupPage": {
+        "title": "Folder Wizard'a Hoş Geldiniz!",
+        "description1": "Folder Wizard, dosyalarınızı zahmetsizce yönetmenize yardımcı olan yapay zeka destekli bir dosya organize programıdır.",
+        "description2": "Başlamak için lütfen Gemini API anahtarınızı girin. Bu anahtar, Folder Wizard'ın Gemini’nin yapay zeka servislerine güvenli bağlantı kurmasını sağlar ve akıllı öneriler sunar.",
+        "description3": "Henüz Gemini API anahtarınız yok mu? Resmi Gemini geliştirici portalından kolayca edinebilirsiniz.",
+        "tutorialButton": "Kılavuza Bak",
+        "settingsButton": "Ayarlar'a Git",
+        "note": "Geçerli bir Gemini API anahtarı olmadan Folder Wizard'ı kullanamazsınız."
     },
     "errors" : {
         "aiAnalyzerError" : "AI analizinde bir hata oluştu.",
         "fileNotFound" : "Dosya bulunamadı.",
         "organizationError" : "Düzenleme sırasında bir hata oluştu.",
-        "apiKeyNotFound" : "Gemini API anahtarı bulunamadı."
+        "apiKeyNotFound" : "Gemini API anahtarı bulunamadı.",
+        "userCancelled" : "Kullanıcı işlemi iptal etti."
+
     },
     "selectFolder" : "Klasör Seç",
     "loading" : "Yükleniyor...",
     "foldersOrganizing" : "Dosyalar Organize Ediliyor...",
     "organizationCompleted" : "Düzenleme Tamamlandı.",
+    "undoOrganisation" : "Düzenlemeyi Geri Al",
+    "undoing" : "Geri Alınıyor...",
+    "undoSuccess" : "Düzenleme Geri Alındı.",
+    "undoError" : "Düzenleme Geri Alınamadı.",
     "backToHomepage" : "Anasayfaya Dön"
 }

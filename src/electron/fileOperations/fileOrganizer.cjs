@@ -1,9 +1,9 @@
 const fs = require("fs-extra");
 const path = require("path");
-const MoveFileCommand = require("./MoveFileCommand.cjs");
+const MoveFileCommand = require("../commands/MoveFileCommand.cjs");
 const pLimit = require("p-limit");
 
-// Allowed file count to be organised
+// Allowed max file count to be organised
 const ALLOWED_FILE_COUNT = 100;
 
 // Allow 5 files to be moved at a time
@@ -12,6 +12,9 @@ const limit = pLimit(5);
 // Stack of undo operations
 const undoStack = [];
 
+// List of created folders
+const createdFolders = [];
+
 /**
  * Moves all files to their specified target folders within the given current path.
  * @param {Array<{fileName:string, targetFolder:string}>} files - All of the files to be moved
@@ -19,32 +22,25 @@ const undoStack = [];
  */
 async function organiseFiles(files, currentPath) {
     if (!files || !currentPath) {
-        console.log("No files or current path provided.");
-        console.log("Files:", files);
-        console.log("Current Path:", currentPath);
         return { success: false, error: "No files or current path provided." };
     }
 
-    console.log("Organising files...");
-    console.log("Current Path:", currentPath);
-
     try {
-        // Map all files to limited async move operations
         const movePromises = files.map((file) =>
             limit(async () => {
                 const { fileName, targetFolder } = file;
+
+                // Target folder path in the current folder exp (D:\folderName)
+                const targetFolderPath = path.join(currentPath, targetFolder);
+
+                // Source file path in the current folder exp (D:\fileName)
                 const source = path.join(currentPath, fileName);
+                // Destination file path in the target folder exp (D:\folderName\fileName)
                 const destination = path.join(
                     currentPath,
                     targetFolder,
                     fileName
                 );
-
-                console.log("Moving file:", {
-                    fileName,
-                    source,
-                    destination,
-                });
 
                 // Creates new move file command
                 const command = new MoveFileCommand(source, destination);
@@ -52,13 +48,14 @@ async function organiseFiles(files, currentPath) {
                 await command.do();
                 // Adds the command to the undo stack for later if user wants to undo operation
                 undoStack.push(command);
+                // Adds the target folder to the list of created folders
+                createdFolders.push(targetFolderPath);
             })
         );
 
         // Wait for all move operations to complete
         await Promise.all(movePromises);
 
-        console.log("Files moved successfully.");
         return { success: true };
     } catch (error) {
         console.error("File move failed:", error);
@@ -78,6 +75,23 @@ async function undoLastOrganise() {
             console.error("Undo failed for a file:", e);
         }
     }
+
+    // Remove created folders from the organised folders
+    const uniqueFolders = [...new Set(createdFolders)].reverse();
+
+    // Checks file count for each folder and deletes if empty
+    for (const folder of uniqueFolders) {
+        try {
+            const files = await fs.readdir(folder);
+            if (files.length === 0) {
+                await fs.rmdir(folder);
+            }
+        } catch (error) {
+            console.error("Undo failed for a folder:", error);
+        }
+    }
+
+    createdFolders.length = 0;
 
     console.log("Undo complete.");
 }

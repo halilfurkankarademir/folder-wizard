@@ -3,7 +3,7 @@ const {
     organiseFiles,
     listFiles,
     undoLastOrganise,
-} = require("./fileOrganizer.cjs");
+} = require("../fileOperations/fileOrganizer.cjs");
 const Store = require("electron-store").default;
 
 const myStore = new Store();
@@ -38,6 +38,12 @@ async function setupIPCHandlers(mainWindow) {
             const result = await dialog.showOpenDialog(mainWindow, {
                 properties: ["openDirectory"],
             });
+
+            if (result.canceled) {
+                return {
+                    success: false,
+                };
+            }
 
             if (!result.canceled && result.filePaths.length > 0) {
                 const folderPath = result.filePaths[0];
@@ -92,10 +98,11 @@ async function setupIPCHandlers(mainWindow) {
         try {
             const isValidKey = await validateGeminiApiKey(apiKey);
             if (!isValidKey) {
-                throw new Error("API key gecersiz.");
+                throw new Error("API key geçersiz.");
             }
-            const encyrptedKey = safeStorage.encryptString(apiKey);
-            myStore.set("apiKey", encyrptedKey);
+
+            const encryptedKey = safeStorage.encryptString(apiKey);
+            myStore.set("apiKey", encryptedKey);
             return { success: true };
         } catch (error) {
             console.error("API key set error:", error);
@@ -103,18 +110,33 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
-    // Opens external links
-    ipcMain.handle("open-link", (event, link) => {
-        shell.openExternal(link);
-    });
-
     ipcMain.handle("get-api-key", async () => {
         const encryptedKey = myStore.get("apiKey");
         if (!encryptedKey) return null;
-        const decryptedKey = safeStorage.decryptString(
-            Buffer.from(encryptedKey, "base64")
-        );
-        return decryptedKey;
+
+        if (safeStorage.isEncryptionAvailable()) {
+            const decryptedKey = safeStorage.decryptString(
+                Buffer.from(encryptedKey, "base64")
+            );
+            return decryptedKey;
+        } else {
+            console.error("Encryption is not available on this platform.");
+        }
+    });
+
+    ipcMain.handle("delete-api-key", async () => {
+        try {
+            await myStore.delete("apiKey");
+            return { success: true };
+        } catch (error) {
+            console.error("API key delete error:", error);
+            return { success: false, error: error.message };
+        }
+    });
+
+    // Opens external links
+    ipcMain.handle("open-link", (event, link) => {
+        shell.openExternal(link);
     });
 
     ipcMain.handle("undo-organisation", async () => {

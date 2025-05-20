@@ -4,61 +4,49 @@ import { useNavigate } from "react-router-dom";
 import MagicBackground from "../components/effects";
 import RoundedButton from "../components/ui/buttons/RoundedButton";
 import { useTranslation } from "react-i18next";
+import Logo from "../assets/images/logo_color.png";
 
 export default function Homepage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [canMakeRequest, setCanMakeRequest] = useState(true);
-    const [showApiKeyModal, setShowApiKeyModal] = useState(false);
     const navigate = useNavigate();
     const { t } = useTranslation();
 
+    // Opens folder dialog and navigates to selected folder if success
     const openFolderDialog = async () => {
         if (window.electronAPI) {
             setLoading(true);
             const response = await window.electronAPI.invoke(
                 "open-folder-dialog"
             );
-            if (response.success) {
-                navigate("/selected", {
-                    state: {
-                        path: response.path,
-                        files: response.data,
-                    },
-                });
+            if (response.success === false) {
+                const errorMessage = t("errors.userCancelled");
+                setError(errorMessage);
+                setLoading(false);
+                return;
             }
+            navigate("/selected", {
+                state: {
+                    path: response.path,
+                    files: response.data,
+                },
+            });
         }
     };
 
-    // Get API key from storage if it exists
-    const getApiKeyFromStorage = async () => {
-        const storedApiKey = await window.electronAPI.invoke("get-api-key");
-        if (!storedApiKey) {
-            setError(t("errors.apiKeyNotFound"));
-            setCanMakeRequest(false);
-            setShowApiKeyModal(true);
-        }
-    };
-
+    // Clears error message in 3 seconds after it appears
     useEffect(() => {
-        getApiKeyFromStorage();
-    }, []);
+        setTimeout(() => {
+            setError(null);
+        }, 3000);
+    }, [error]);
 
     return (
         <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center relative overflow-hidden">
-            {/* Büyülü Arkaplan Efektleri */}
             <MagicBackground />
-
-            {/* Ana İçerik */}
             <div className="z-10 text-center px-10 max-w-md">
-                {/* Logo */}
                 <div className="mb-6">
-                    <h1
-                        className="text-6xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-400 leading-24"
-                        style={{ fontFamily: "Henny Penny" }}
-                    >
-                        Folder Wizard
-                    </h1>
+                    <img src={Logo} alt="" className="w-64 h-64 mx-auto " />
                     <p className="text-zinc-400 text-sm">
                         {t("homepage.subtitle")}
                     </p>
@@ -69,7 +57,6 @@ export default function Homepage() {
                         hasClicked={loading}
                         onClick={openFolderDialog}
                     />
-
                     <button
                         onClick={() => navigate("/settings")}
                         className="text-zinc-400 hover:text-purple-400 transition-colors flex items-center justify-center gap-2 mx-auto mt-6"
@@ -78,7 +65,6 @@ export default function Homepage() {
                         <span className="text-sm">{t("settings.title")}</span>
                     </button>
                 </div>
-
                 {error && (
                     <p className="mt-8 text-red-500 text-sm font-semibold">
                         {error}

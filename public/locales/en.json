@@ -30,22 +30,43 @@
         "apiKeyPlaceholder": "You have a saved API key, you can change it",
         "apiKeyExistsMessage": "A saved API key exists. You can replace it by entering a new key.",
         "save": "Save",
+        "delete": "Delete",
         "apiKeySavedSuccess": "API key saved successfully!",
         "apiKeyInvalidError": "Invalid API key!",
         "apiKeyEmptyError": "API key cannot be empty!",
         "apiKeySaveUnexpectedError": "An error occurred while saving the API key!",
+        "apiKeyDeleteError": "An error occurred while deleting the API key!",
         "about": "About",
-        "copyright": "© 2025 Folder Wizard"
+        "copyright": "© 2025 Folder Wizard",
+        "backgroundAnimation": "Background Animation",
+        "on" : "On",
+        "off" : "Off"
     },
+
+    "setupPage": {
+        "title": "Welcome to Folder Wizard!",
+        "description1": "Folder Wizard is an AI-powered file organization tool designed to help you manage your files effortlessly.",
+        "description2": "To get started, please enter your Gemini API key. This key enables Folder Wizard to securely connect to Gemini's AI services and provide intelligent suggestions.",
+        "description3": "Don’t have a Gemini API key yet? You can easily get one from Gemini’s official developer portal.",
+        "tutorialButton": "View Tutorial",
+        "settingsButton": "Go to Settings",
+        "note": "You won't be able to use Folder Wizard without a valid Gemini API key."
+    },
+      
     "errors" : {
         "aiAnalyzerError" : "An error occurred during AI analysis.",
         "fileNotFound" : "File not found.",
         "organizationError" : "An error occurred during organization.",
-        "apiKeyNotFound" : "Gemini API key not found."
+        "apiKeyNotFound" : "Gemini API key not found.",
+        "userCancelled" : "User cancelled the operation."
     },
     "selectFolder" : "Select Folder",
     "loading" : "Loading...",
     "foldersOrganizing" : "Folders Organizing...",
     "organizationCompleted" : "Organization Completed.",
+    "undoOrganisation" : "Undo Organisation",
+    "undoing" : "Undoing...",
+    "undoSuccess" : "Undo Success.",
+    "undoError" : "Undo Error.",
     "backToHomepage" : "Back to Homepage"
 }

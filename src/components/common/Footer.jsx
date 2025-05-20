@@ -17,45 +17,49 @@ const Footer = () => {
     };
 
     return (
-        <footer className="fixed bottom-0 left-0 right-0 py-3 px-4 md:px-8 z-50 backdrop-blur-sm">
-            <div className="max-w-full mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-center">
-                    <div className="flex items-center space-x-6 mb-3 md:mb-0">
-                        <button
-                            onClick={() => handleClickOpenLink("github")}
-                            className="text-zinc-500 hover:text-purple-400 transition-colors"
-                            aria-label="GitHub"
-                        >
-                            <BsGithub className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={() => handleClickOpenLink("linkedin")}
-                            className="text-zinc-500 hover:text-purple-400 transition-colors"
-                            aria-label="LinkedIn"
-                        >
-                            <BsLinkedin className="w-5 h-5" />
-                        </button>
-                    </div>
+        <footer className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-sm py-4 px-4 md:px-8 text-sm text-zinc-500">
+            <div className="max-w-full mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div className="flex items-center space-x-5">
+                    <button
+                        onClick={() => handleClickOpenLink("github")}
+                        aria-label="GitHub"
+                        className="hover:text-purple-400 transition-colors"
+                    >
+                        <BsGithub className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={() => handleClickOpenLink("linkedin")}
+                        aria-label="LinkedIn"
+                        className="hover:text-purple-400 transition-colors"
+                    >
+                        <BsLinkedin className="w-5 h-5" />
+                    </button>
+                </div>
 
-                    <div className="text-center md:text-right">
-                        <p className="text-sm text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 font-medium mb-1">
-                            &copy; {new Date().getFullYear()} Folder Wizard
-                        </p>
-                        <div className="flex justify-center md:justify-end space-x-4 text-xs text-zinc-500">
-                            <Link
-                                to={"/privacy"}
-                                className="hover:text-purple-400 transition-colors"
-                            >
-                                {t("footer.privacy")}
-                            </Link>
-                            <Link
-                                onClick={() => handleClickOpenLink("license")}
-                                className="hover:text-purple-400 transition-colors"
-                            >
-                                {t("footer.license")}
-                            </Link>
-                        </div>
-                    </div>
+                {/* Orta - Uygulama İsmi */}
+                <div className="text-center md:text-center">
+                    <p className="font-medium text-zinc-400">
+                        Folder Wizard by Halil Furkan Karademir
+                    </p>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                        &copy; {new Date().getFullYear()} Folder Wizard
+                    </p>
+                </div>
+
+                {/* Sağ - Linkler */}
+                <div className="flex space-x-4">
+                    <Link
+                        to="/privacy"
+                        className="hover:text-purple-400 transition-colors"
+                    >
+                        {t("footer.privacy")}
+                    </Link>
+                    <button
+                        onClick={() => handleClickOpenLink("license")}
+                        className="hover:text-purple-400 transition-colors"
+                    >
+                        {t("footer.license")}
+                    </button>
                 </div>
             </div>
         </footer>

@@ -132,7 +132,7 @@ const SuggestedOrganisation = () => {
     }
 
     return (
-        <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center">
+        <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center py-4">
             <MagicBackground />
             <div className="container mx-auto max-w-7xl p-4 md:p-8 pt-16 pb-12">
                 {/* Header */}

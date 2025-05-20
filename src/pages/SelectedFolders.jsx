@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import prompts from "../utils/constans/prompts";
 import MagicBackground from "../components/effects";
 import { useTranslation } from "react-i18next";
-import { useLanguage } from "../context/LanguageContex";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SelectedFolders() {
     const { t } = useTranslation();
