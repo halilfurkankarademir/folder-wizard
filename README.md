@@ -67,6 +67,7 @@ npm run electron:dev
 Build the application for production:
 
 ```bash
+npm run build
 npm run electron:build
 ```
 
