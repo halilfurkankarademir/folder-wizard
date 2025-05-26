@@ -1,13 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
+import { parseAIJsonResponse } from "../utils/helpers";
 
+// Gets response from ai by using gemini
 const getResponseFromAI = async (message) => {
+    // Gets stored api key from electron app
     const apiKey = await window.electronAPI?.invoke("get-api-key");
 
-    let aiAgent;
-
-    if (apiKey) {
-        aiAgent = new GoogleGenAI({ apiKey });
+    if (!apiKey) {
+        console.error("API key not found");
+        return;
     }
+
+    const aiAgent = new GoogleGenAI({ apiKey });
+
     try {
         const response = await aiAgent.models.generateContent({
             model: "gemini-2.0-flash",
@@ -20,16 +25,5 @@ const getResponseFromAI = async (message) => {
         console.error("An error accured to get response from ai");
     }
 };
-
-// It cleans ```json and ``` from ai response
-function parseAIJsonResponse(aiResponse) {
-    try {
-        const cleanString = aiResponse.replace(/^```json|```$/gm, "").trim();
-        return JSON.parse(cleanString);
-    } catch (error) {
-        console.error("Parse hatası:", error);
-        return null;
-    }
-}
 
 export default getResponseFromAI;

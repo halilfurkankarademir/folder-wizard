@@ -17,7 +17,7 @@ export const ApiKeyProvider = ({ children }) => {
             const stored = await window.electronAPI.invoke("get-api-key");
             if (stored) setApiKey(stored);
         } catch (error) {
-            console.error("API anahtarı alınırken hata oluştu:", error);
+            throw error;
         } finally {
             setLoading(false);
         }

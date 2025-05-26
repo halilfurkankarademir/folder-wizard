@@ -1,7 +1,6 @@
 const MagicGlowEffect = () => {
     return (
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-            {/* Büyülü Parıltı Efektleri */}
             <div
                 className="absolute top-1/4 left-1/4 w-60 h-60 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-pulse"
                 style={{

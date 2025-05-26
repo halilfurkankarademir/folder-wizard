@@ -1,7 +1,7 @@
 const { app, BrowserWindow, globalShortcut } = require("electron");
 const path = require("path");
-const { setupIPCHandlers } = require("./ipc/ipcHandlers.cjs");
 const log = require("electron-log");
+const { setupIPCHandlers } = require("./ipc.cjs");
 
 let mainWindow;
 
@@ -23,6 +23,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
+            allowRunningInsecureContent: false,
             preload: path.join(__dirname, "preload.cjs"),
         },
     });
@@ -39,6 +40,9 @@ function createWindow() {
 app.whenReady().then(() => {
     // Creates a new browser window
     mainWindow = createWindow();
+
+    // Maximizes the window when it is created
+    mainWindow.maximize();
 
     // Initializes ipc handler functions
     setupIPCHandlers(mainWindow);

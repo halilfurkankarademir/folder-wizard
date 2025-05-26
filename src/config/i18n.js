@@ -2,8 +2,6 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpBackend from "i18next-http-backend";
 
-const isDev = import.meta.env.VITE_NODE_ENV === "development";
-
 const initialLanguage = localStorage.getItem("activeLanguage") || "en";
 
 i18n.use(HttpBackend)
@@ -13,7 +11,7 @@ i18n.use(HttpBackend)
             loadPath: "./locales/{{lng}}.json",
         },
         fallbackLng: initialLanguage,
-        debug: isDev ? true : false,
+        debug: false,
         interpolation: {
             escapeValue: false,
         },

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaFolder, FaCheck, FaHome, FaUndo, FaSpinner } from "react-icons/fa";
+import { FaFolder, FaCheck, FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import UndoButtonRenderer from "../../components/ui/renderers/UndoButtonRenderer";
 
 const FoldersOrganising = () => {
     const [done, setDone] = useState(false);
@@ -26,45 +27,6 @@ const FoldersOrganising = () => {
         const timer = setTimeout(() => setDone(true), 3000);
         return () => clearTimeout(timer);
     }, []);
-
-    const renderUndoButton = () => {
-        switch (undoStatus) {
-            case "loading":
-                return (
-                    <button
-                        disabled
-                        className="flex items-center justify-center gap-2 px-4 py-3 text-sm bg-neutral-800 text-white rounded-lg transition-all duration-300 opacity-70"
-                    >
-                        <FaSpinner className="w-4 h-4 animate-spin" />
-                        {t("undoing")}
-                    </button>
-                );
-            case "success":
-                return (
-                    <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm bg-green-500/10 text-green-400 rounded-lg animate-fadeIn">
-                        <FaCheck className="w-4 h-4" />
-                        {t("undoSuccess")}
-                    </div>
-                );
-            case "error":
-                return (
-                    <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-500/10 text-red-400 rounded-lg animate-shake">
-                        <FaUndo className="w-4 h-4" />
-                        {t("undoError")}
-                    </div>
-                );
-            default:
-                return (
-                    <button
-                        onClick={handleClickUndo}
-                        className="flex items-center justify-center gap-2 px-4 py-3 text-sm bg-neutral-800 hover:bg-neutral-700 text-white rounded-lg transition-all duration-300"
-                    >
-                        <FaUndo className="w-4 h-4" />
-                        {t("undoOrganisation")}
-                    </button>
-                );
-        }
-    };
 
     return (
         <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center p-8">
@@ -105,7 +67,13 @@ const FoldersOrganising = () => {
                             {t("organizationCompleted")}
                         </h2>
                         <div className="flex flex-col space-y-4 w-full max-w-xs">
-                            {renderUndoButton()}
+                            {
+                                <UndoButtonRenderer
+                                    undoStatus={undoStatus}
+                                    handleClickUndo={handleClickUndo}
+                                    t={t}
+                                />
+                            }
                             <button
                                 className="px-4 py-3 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
                                 onClick={() => navigate("/")}

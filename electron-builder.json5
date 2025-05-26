@@ -1,13 +1,30 @@
 {
     appId: "com.folder-wizard.app",
     productName: "Folder Wizard",
+    copyright: "Copyright © 2025 Halil Furkan Karademir",
     directories: {
         output: "release/${version}",
     },
-    asar: true,
-    files: ["dist/**/*", "src/electron/**/*", "package.json", "public/**/*"],
+    files: [
+        "dist/**/*",
+        "src/electron/**/*",
+        "package.json",
+        "public/**/*",
+        "!**/*.map",
+    ],
     win: {
-        target: ["nsis"],
+        target: ["nsis", "portable"],
         icon: "src/assets/images/logo.png",
+        requestedExecutionLevel: "asInvoker",
     },
+    nsis: {
+        oneClick: false,
+        allowToChangeInstallationDirectory: true,
+        perMachine: false,
+    },
+    asar: true,
+    compression: "maximum",
+    removePackageScripts: true,
+    nodeGypRebuild: false,
+    npmRebuild: false,
 }

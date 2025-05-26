@@ -4,7 +4,6 @@ import { useBgAnimation } from "../../context/BgAnimationContext";
 
 export { MagicGlowEffect, ParticleEffect };
 
-// Tüm efektleri içeren bir bileşen
 const MagicBackground = () => {
     const { isBgAnimationActive } = useBgAnimation();
 

@@ -94,13 +94,11 @@ const fileFormats = {
     rpm: "package",
 
     // Others
-
     aep: "aftereffects",
     ae: "aftereffects",
     ai: "illustrator",
     psd: "photoshop",
     pr: "premiere",
-    prproj: "premiere",
     prproj: "premiere",
     "3gp": "video",
     "7z": "archive",

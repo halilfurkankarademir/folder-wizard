@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { FaCog } from "react-icons/fa";
+import { FaCog, FaFolder } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import MagicBackground from "../components/effects";
-import RoundedButton from "../components/ui/buttons/RoundedButton";
+import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
-import Logo from "../assets/images/logo_color.png";
+import Logo from "../../assets/images/logo_color.png";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 
 export default function Homepage() {
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,12 @@ export default function Homepage() {
                 "open-folder-dialog"
             );
             if (response.success === false) {
-                const errorMessage = t("errors.userCancelled");
+                const errorMessage = t(`errors.${response.error}`);
+                setError(errorMessage);
+                setLoading(false);
+                return;
+            } else if (response.data.success === false) {
+                const errorMessage = t(`errors.${response.data.error}`);
                 setError(errorMessage);
                 setLoading(false);
                 return;
@@ -38,7 +43,7 @@ export default function Homepage() {
     useEffect(() => {
         setTimeout(() => {
             setError(null);
-        }, 3000);
+        }, 5000);
     }, [error]);
 
     return (
@@ -53,9 +58,11 @@ export default function Homepage() {
                 </div>
 
                 <div className="space-y-4">
-                    <RoundedButton
+                    <PrimaryButton
                         hasClicked={loading}
                         onClick={openFolderDialog}
+                        buttonIcon={FaFolder}
+                        buttonTxt={t("selectFolder")}
                     />
                     <button
                         onClick={() => navigate("/settings")}

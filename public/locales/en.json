@@ -42,7 +42,39 @@
         "on" : "On",
         "off" : "Off"
     },
-
+    "privacyPage": {
+        "title": "Privacy Policy",
+        "subtitle": "How we handle your data",
+        "intro": "Thank you for using Folder Wizard. Your privacy matters to us. This policy explains our approach to user data and the use of Google's Gemini API.",
+        "geminiSection": {
+        "title": "Gemini API Usage",
+        "content": "Folder Wizard uses Google's Gemini API to provide smart organization features like suggesting new folder structures. This feature is designed to help you organize files more efficiently."
+        },
+        "dataSentSection": {
+        "title": "Data Sent to API",
+        "content": "Data sent to Gemini API never includes your file contents. Only the following information may be sent:",
+        "bullets": [
+            "File Name",
+            "File Extension",
+            "File Path (partial or full)"
+        ],
+        "note": "All communications use industry-standard security protocols (HTTPS/SSL)."
+        },
+        "googleDisclaimer": {
+        "title": "Google Data Processing",
+        "content": "Note: How Google processes data sent to Gemini API is governed by Google's own Terms of Service and Privacy Policy.",
+        "warning": "Important: Folder Wizard cannot be held responsible for data breaches or security issues on Google's servers."
+        },
+        "localProcessing": {
+        "title": "Local Data Handling",
+        "content": "All file operations (moving, creating folders etc.) happen locally on your device. No data is stored permanently."
+        },
+        "policyChanges": {
+        "title": "Policy Changes",
+        "content": "We may update this policy as features change. Significant changes will be notified in-app."
+        },
+        "googlePolicyLink": "Google Privacy Policy"
+     },
     "setupPage": {
         "title": "Welcome to Folder Wizard!",
         "description1": "Folder Wizard is an AI-powered file organization tool designed to help you manage your files effortlessly.",
@@ -58,7 +90,9 @@
         "fileNotFound" : "File not found.",
         "organizationError" : "An error occurred during organization.",
         "apiKeyNotFound" : "Gemini API key not found.",
-        "userCancelled" : "User cancelled the operation."
+        "userCancelledFolderSelection" : "User cancelled the folder selection.",
+        "somethingWentWrong" : "Error! Something went wrong.",
+        "maxFileCountExceeded" : "Maximum file count exceeded. (100 files)"
     },
     "selectFolder" : "Select Folder",
     "loading" : "Loading...",
@@ -68,5 +102,6 @@
     "undoing" : "Undoing...",
     "undoSuccess" : "Undo Success.",
     "undoError" : "Undo Error.",
-    "backToHomepage" : "Back to Homepage"
+    "backToHomepage" : "Back to Homepage",
+    "showFileLocation" : "Show File Location"
 }

@@ -1,7 +1,9 @@
 const fs = require("fs-extra");
 const path = require("path");
-const MoveFileCommand = require("../commands/MoveFileCommand.cjs");
+const MoveFileCommand = require("../electron-utils/commands/MoveFileCommand.cjs");
 const pLimit = require("p-limit");
+const log = require("electron-log");
+const { exec } = require("child_process");
 
 // Allowed max file count to be organised
 const ALLOWED_FILE_COUNT = 100;
@@ -24,6 +26,8 @@ async function organiseFiles(files, currentPath) {
     if (!files || !currentPath) {
         return { success: false, error: "No files or current path provided." };
     }
+
+    log.info("Organising files...");
 
     try {
         const movePromises = files.map((file) =>
@@ -56,23 +60,28 @@ async function organiseFiles(files, currentPath) {
         // Wait for all move operations to complete
         await Promise.all(movePromises);
 
+        log.info("Organisation complete.");
+
         return { success: true };
     } catch (error) {
-        console.error("File move failed:", error);
+        log.error("Organisation failed:", error);
         return { success: false, error: error.message };
     }
 }
 
 /**
  * Undoes the last organise operation
+ * @returns {Promise<void>}
  */
 async function undoLastOrganise() {
+    log.info("Undoing last organise operation...");
+
     while (undoStack.length > 0) {
         const lastCommand = undoStack.pop();
         try {
             await lastCommand.undo();
         } catch (e) {
-            console.error("Undo failed for a file:", e);
+            log.error("Undo failed:", e);
         }
     }
 
@@ -87,16 +96,24 @@ async function undoLastOrganise() {
                 await fs.rmdir(folder);
             }
         } catch (error) {
-            console.error("Undo failed for a folder:", error);
+            log.error("Undo failed:", error);
         }
     }
 
     createdFolders.length = 0;
 
-    console.log("Undo complete.");
+    log.info("Undo complete.");
 }
 
+/**
+ * Lists all the files in the given directory
+ * @param {string} dir - Directory path to list files from
+ * @returns {Promise<Array>} - List of files in the directory
+ * @throws {Error} - If the maximum file count is exceeded
+ * */
 async function listFiles(dir) {
+    log.info("Listing files...");
+
     let results = [];
 
     const files = await fs.readdir(dir, { withFileTypes: true });
@@ -104,14 +121,14 @@ async function listFiles(dir) {
     const fileCount = files.length;
 
     if (fileCount > ALLOWED_FILE_COUNT) {
-        throw new Error(
-            `En fazla ${ALLOWED_FILE_COUNT} adet dosya organize edilebilir.`
-        );
+        log.error("Maximum file count exceeded.");
+        return { success: false, error: "maxFileCountExceeded" };
     }
 
     results = await Promise.all(
         files.map(async (file) => {
             const filePath = path.join(dir, file.name);
+            // Stat of the file
             const stat = await fs.stat(filePath);
             return {
                 name: file.name,
@@ -123,7 +140,24 @@ async function listFiles(dir) {
         })
     );
 
+    log.info("Listing complete.");
+
     return results;
 }
 
-module.exports = { organiseFiles, undoLastOrganise, listFiles };
+/**
+ * Opens folder of the given file
+ * @param {string} filePath - File path to open
+ */
+async function openFile(filePath) {
+    // Path of the file folder
+    const folderPath = path.dirname(filePath);
+
+    exec(`start "" "${folderPath}"`, (err) => {
+        if (err) {
+            log.error("File open error:", err);
+        }
+    });
+}
+
+module.exports = { organiseFiles, undoLastOrganise, listFiles, openFile };

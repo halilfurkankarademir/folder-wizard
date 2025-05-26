@@ -42,6 +42,39 @@
         "on" : "Açık",
         "off" : "Kapalı"
     },
+    "privacyPage": {
+        "title": "Gizlilik Politikası",
+        "subtitle": "Verilerinizle ilgili yaklaşımımız",
+        "intro": "Folder Wizard'ı kullandığınız için teşekkür ederiz. Gizliliğiniz bizim için önemlidir. Bu politika, kullanıcı verilerine yaklaşımımızı ve Google'ın Gemini API kullanımını açıklar.",
+        "geminiSection": {
+            "title": "Gemini API Kullanımı",
+            "content": "Folder Wizard, yeni klasör yapıları önerme gibi akıllı organizasyon özellikleri sunmak için Google'ın Gemini API'sini kullanır."
+        },
+        "dataSentSection": {
+            "title": "API'ye Gönderilen Veriler",
+            "content": "Gemini API'ye gönderilen veriler dosya içeriğinizi asla içermez. Yalnızca şu bilgiler gönderilebilir:",
+            "bullets": [
+                "Dosya Adı",
+                "Dosya Uzantısı",
+                "Dosya Yolu (kısmi veya tam)"
+            ],
+            "note": "Tüm iletişimler endüstri standardı güvenlik protokolleri (HTTPS/SSL) kullanır."
+        },
+        "googleDisclaimer": {
+        "title": "Google Veri İşleme",
+        "content": "Not: Gemini API'ye gönderilen verilerin işlenme şekli Google'ın Hizmet Şartları ve Gizlilik Politikası'na tabidir.",
+        "warning": "Önemli: Folder Wizard, Google sunucularındaki veri ihlallerinden veya güvenlik sorunlarından sorumlu tutulamaz."
+        },
+        "localProcessing": {
+        "title": "Yerel Veri İşleme",
+        "content": "Tüm dosya işlemleri (taşıma, klasör oluşturma vb.) yalnızca cihazınızda gerçekleşir. Hiçbir veri kalıcı olarak saklanmaz."
+        },
+        "policyChanges": {
+        "title": "Politika Değişiklikleri",
+        "content": "Özellikler değiştikçe bu politikayı güncelleyebiliriz. Önemli değişiklikler uygulama içinde bildirilecektir."
+        },
+        "googlePolicyLink": "Google Gizlilik Politikası"
+    },
     "setupPage": {
         "title": "Folder Wizard'a Hoş Geldiniz!",
         "description1": "Folder Wizard, dosyalarınızı zahmetsizce yönetmenize yardımcı olan yapay zeka destekli bir dosya organize programıdır.",
@@ -56,8 +89,9 @@
         "fileNotFound" : "Dosya bulunamadı.",
         "organizationError" : "Düzenleme sırasında bir hata oluştu.",
         "apiKeyNotFound" : "Gemini API anahtarı bulunamadı.",
-        "userCancelled" : "Kullanıcı işlemi iptal etti."
-
+        "userCancelledFolderSelection" : "Kullanıcı klasör seçimi iptal etti.",
+        "somethingWentWrong" : "Hata! Bir sıkıntı oluştu.",
+        "maxFileCountExceeded" : "Maksimum dosya sayısına ulaşıldı. (100 dosya)"
     },
     "selectFolder" : "Klasör Seç",
     "loading" : "Yükleniyor...",
@@ -67,5 +101,6 @@
     "undoing" : "Geri Alınıyor...",
     "undoSuccess" : "Düzenleme Geri Alındı.",
     "undoError" : "Düzenleme Geri Alınamadı.",
-    "backToHomepage" : "Anasayfaya Dön"
+    "backToHomepage" : "Ana Sayfaya Dön",
+    "showFileLocation" : "Dosya Konumunu Görüntüle"
 }

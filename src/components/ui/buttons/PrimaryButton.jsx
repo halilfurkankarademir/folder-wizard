@@ -1,8 +1,12 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
-import { FaChevronRight, FaFolder } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 
-const RoundedButton = ({ hasClicked, onClick }) => {
+const PrimaryButton = ({
+    hasClicked,
+    onClick,
+    buttonTxt,
+    buttonIcon: ButtonIcon,
+}) => {
     const { t } = useTranslation();
 
     return (
@@ -20,8 +24,8 @@ const RoundedButton = ({ hasClicked, onClick }) => {
                     </>
                 ) : (
                     <>
-                        <FaFolder className="text-sm" />
-                        <span className="text-sm">{t("selectFolder")}</span>
+                        <ButtonIcon className="text-sm" />
+                        <span className="text-sm">{buttonTxt}</span>
                         <FaChevronRight className="text-xs opacity-70" />
                     </>
                 )}
@@ -30,4 +34,4 @@ const RoundedButton = ({ hasClicked, onClick }) => {
     );
 };
 
-export default RoundedButton;
+export default PrimaryButton;

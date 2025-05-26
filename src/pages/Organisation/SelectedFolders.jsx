@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { FaFile, FaArrowLeft, FaMagic, FaArrowRight } from "react-icons/fa";
-import { getFileIcon } from "../utils/helpers";
-import getResponseFromAI from "../services/aiService";
+import { FaArrowLeft, FaMagic, FaArrowRight } from "react-icons/fa";
+import getResponseFromAI from "../../services/aiService";
 import { useLocation, useNavigate } from "react-router-dom";
-import prompts from "../utils/constans/prompts";
-import MagicBackground from "../components/effects";
+import prompts from "../../utils/constans/prompts";
+import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
+import FileListRenderer from "../../components/ui/renderers/FileListRenderer";
 
 export default function SelectedFolders() {
     const { t } = useTranslation();
@@ -80,7 +80,7 @@ export default function SelectedFolders() {
     }, []);
 
     return (
-        <div className="w-full min-h-screen  bg-neutral-950 text-white flex flex-col justify-center items-center">
+        <div className="w-full min-h-screen py-12 bg-neutral-950 text-white flex flex-col justify-center items-center">
             {analyzing ? (
                 <div className="w-full h-screen flex flex-col justify-center items-center text-white">
                     <MagicBackground />
@@ -156,59 +156,13 @@ export default function SelectedFolders() {
                                 {t("errors.fileNotFound")}
                             </p>
                         ) : (
-                            <div className="max-h-[calc(100vh-350px)] overflow-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-                                <FileList files={files} />
+                            <div>
+                                <FileListRenderer files={files} />
                             </div>
                         )}
                     </div>
                 </div>
             )}
-        </div>
-    );
-}
-
-function FileList({ files }) {
-    // Dosya isminden uzantıyı ayırma fonksiyonu
-    const getFileNameAndExtension = (fileName) => {
-        const lastDotIndex = fileName.lastIndexOf(".");
-        if (lastDotIndex === -1 || lastDotIndex === 0) {
-            return { name: fileName, extension: "" };
-        }
-        return {
-            name: fileName.substring(0, lastDotIndex),
-            extension: fileName.substring(lastDotIndex),
-        };
-    };
-
-    return (
-        <div className="space-y-2">
-            {files.map((file, index) => {
-                const IconComponent = getFileIcon(file.name) || FaFile;
-                const { name, extension } = getFileNameAndExtension(file.name);
-
-                return (
-                    <div
-                        key={index}
-                        className="flex items-center p-3 bg-zinc-800/50 rounded-lg border border-zinc-700/30 hover:bg-zinc-800 transition-colors duration-150"
-                    >
-                        <span className="w-8 h-8 flex items-center justify-center bg-purple-600/30 rounded-full text-purple-300">
-                            <IconComponent />
-                        </span>
-                        <div className="ml-3 truncate flex-1">
-                            <div className="flex items-center">
-                                <span className="text-sm text-zinc-300">
-                                    {name}
-                                </span>
-                                {extension && (
-                                    <span className="text-xs text-zinc-400 ml-1">
-                                        {extension}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                );
-            })}
         </div>
     );
 }

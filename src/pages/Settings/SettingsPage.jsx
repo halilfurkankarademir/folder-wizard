@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import MagicBackground from "../components/effects";
-import { useLanguage } from "../context/LanguageContext";
-import { useBgAnimation } from "../context/BgAnimationContext";
-import { useApiKey } from "../context/ApiKeyContext";
+import MagicBackground from "../../components/effects";
+import { useLanguage } from "../../context/LanguageContext";
+import { useBgAnimation } from "../../context/BgAnimationContext";
+import { useApiKey } from "../../context/ApiKeyContext";
+import { FaLanguage, FaPaintBrush, FaKey, FaInfoCircle } from "react-icons/fa";
 
 const SettingsPage = () => {
     const { t, i18n } = useTranslation();
@@ -50,6 +51,7 @@ const SettingsPage = () => {
             }
             setSavedMessage(t("settings.apiKeySavedSuccess"));
             setStoredApiKeyExists(true);
+            setApiKey(apiKeyInput.trim());
             setApiKeyInput("");
             setTimeout(() => setSavedMessage(""), 3000);
         } catch (err) {
@@ -97,9 +99,9 @@ const SettingsPage = () => {
                         {t("settings.title")}
                     </h1>
 
-                    {/* Language Settings */}
                     <div className="mb-6">
-                        <h2 className="text-lg font-medium mb-3">
+                        <h2 className="text-lg font-medium mb-3 flex items-center gap-2">
+                            <FaLanguage className="text-purple-400" />
                             {t("settings.language")}
                         </h2>
                         <div className="flex gap-3">
@@ -126,9 +128,9 @@ const SettingsPage = () => {
                         </div>
                     </div>
 
-                    {/* Background Settings */}
                     <div className="mb-6">
-                        <h2 className="text-lg font-medium mb-3">
+                        <h2 className="text-lg font-medium mb-3 flex items-center gap-2">
+                            <FaPaintBrush className="text-purple-400" />
                             {t("settings.backgroundAnimation")}
                         </h2>
                         <div className="flex gap-3">
@@ -159,9 +161,9 @@ const SettingsPage = () => {
                         </div>
                     </div>
 
-                    {/* Gemini API Key Ayarı */}
                     <div className="mb-6">
-                        <h2 className="text-lg font-medium mb-3">
+                        <h2 className="text-lg font-medium mb-3 flex items-center gap-2">
+                            <FaKey className="text-purple-400" />
                             {t("settings.geminiApiKey")}
                         </h2>
                         <div className="flex gap-3 items-center">
@@ -175,7 +177,7 @@ const SettingsPage = () => {
                             />
                             <button
                                 onClick={handleSaveApiKey}
-                                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-300"
+                                className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-all duration-300"
                             >
                                 {t("settings.save")}
                             </button>
@@ -203,14 +205,14 @@ const SettingsPage = () => {
                         )}
                     </div>
 
-                    {/* Uygulama Bilgileri */}
                     <div>
-                        <h2 className="text-lg font-medium mb-3">
+                        <h2 className="text-lg font-medium mb-3 flex items-center gap-2">
+                            <FaInfoCircle className="text-purple-400" />
                             {t("settings.about")}
                         </h2>
                         <div className="bg-zinc-800/50 rounded-lg p-4">
                             <p className="text-sm text-zinc-400">
-                                Folder Wizard v0.0.1
+                                Folder Wizard v1.0.0
                             </p>
                             <p className="text-sm text-zinc-400 mt-1">
                                 {t("settings.copyright")}
