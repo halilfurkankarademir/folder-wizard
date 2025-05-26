@@ -1,20 +1,27 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useFileOrganization } from "../../hooks/useFileOrganization";
 import { OrganizationHeader } from "../../components/FileOrganization/OrganizationHeader";
 import { FileGroupCard } from "../../components/FileOrganization/FileGroupCard";
 import MagicBackground from "../../components/effects";
 import FoldersOrganising from "./FoldersOrganising";
+import { useEffect } from "react";
 
 const SuggestedOrganisation = () => {
     const { state } = useLocation();
     const { suggestedFileOrg, currentPath } = state || {};
 
-    const { hasOrganised, groupedFiles, applyChanges } =
+    const navigate = useNavigate();
+
+    const { hasOrganised, groupedFiles, applyChanges, setHasOrganised } =
         useFileOrganization(suggestedFileOrg);
 
-    if (hasOrganised) {
-        return <FoldersOrganising />;
-    }
+    useEffect(() => {
+        if (hasOrganised) {
+            navigate("/organising");
+            // Yönlendirme sonrası state'i sıfırla
+            setHasOrganised(false);
+        }
+    }, [hasOrganised, navigate, setHasOrganised]);
 
     return (
         <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center py-12">

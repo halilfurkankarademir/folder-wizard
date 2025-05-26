@@ -6,15 +6,15 @@ export const NetworkProvider = ({ children }) => {
     const [isConnected, setIsConnected] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const checkConnection = async () => {
+    const initialCheckConnection = async () => {
+        setLoading(true);
         try {
-            setLoading(true);
             const result = await window.electronAPI.invoke(
                 "check-network-connection"
             );
             setIsConnected(result);
         } catch (error) {
-            console.error("Network check failed:", error);
+            console.error("Initial network check failed:", error);
             setIsConnected(false);
         } finally {
             setLoading(false);
@@ -22,12 +22,7 @@ export const NetworkProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        checkConnection();
-
-        // Check connection every 15 seconds
-        const interval = setInterval(checkConnection, 15000);
-
-        return () => clearInterval(interval);
+        initialCheckConnection();
     }, []);
 
     return (

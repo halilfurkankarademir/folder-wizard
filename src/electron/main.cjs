@@ -6,7 +6,7 @@ const { setupIPCHandlers } = require("./ipc.cjs");
 let mainWindow;
 
 const isDev = process.env.NODE_ENV === "development";
-const iconPath = path.join(__dirname, "../assets/images/logo.png");
+const iconPath = path.join(__dirname, "../assets/images/logo.ico");
 
 /**
  * Creates a new browser window
@@ -25,6 +25,7 @@ function createWindow() {
             contextIsolation: true,
             allowRunningInsecureContent: false,
             preload: path.join(__dirname, "preload.cjs"),
+            sandbox: true,
         },
     });
 

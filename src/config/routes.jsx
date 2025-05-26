@@ -6,6 +6,7 @@ import Footer from "../components/common/Footer";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import ErrorPage from "../pages/Error/ErrorPage";
 import NoNetworkPage from "../pages/Error/NoNetworkPage";
+import FoldersOrganising from "../pages/Organisation/FoldersOrganising";
 
 const Homepage = lazy(() => import("../pages/Home/Homepage"));
 const SelectedFolders = lazy(() =>
@@ -46,6 +47,14 @@ const DefinedRoutes = () => {
                             element={
                                 <ProtectedRoute>
                                     <SuggestedOrganisation />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/organising"
+                            element={
+                                <ProtectedRoute>
+                                    <FoldersOrganising />
                                 </ProtectedRoute>
                             }
                         />

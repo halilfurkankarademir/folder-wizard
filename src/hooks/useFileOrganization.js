@@ -50,5 +50,6 @@ export const useFileOrganization = (suggestedFileOrg) => {
         hasOrganised,
         groupedFiles,
         applyChanges,
+        setHasOrganised,
     };
 };

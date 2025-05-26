@@ -7,8 +7,6 @@ export default function ProtectedRoute({ children }) {
     const { apiKey, loading: apiLoading } = useApiKey();
     const { isConnected, loading: networkLoading } = useNetworkContext();
 
-    console.log(isConnected);
-
     const { t } = useTranslation();
 
     if (apiLoading || networkLoading) {

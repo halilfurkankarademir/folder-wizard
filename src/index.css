@@ -57,6 +57,11 @@ button {
     -webkit-app-region: no-drag;
 }
 
+.animate-progress {
+    transition: width 3s linear;
+    width: 100%;
+}
+
 @layer components {
     .page {
         @apply bg-gray-900 w-full h-screen flex flex-col items-center justify-center;
