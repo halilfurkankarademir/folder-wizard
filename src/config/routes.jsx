@@ -5,6 +5,7 @@ import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import ErrorPage from "../pages/Error/ErrorPage";
+import NoNetworkPage from "../pages/Error/NoNetworkPage";
 
 const Homepage = lazy(() => import("../pages/Home/Homepage"));
 const SelectedFolders = lazy(() =>
@@ -51,6 +52,7 @@ const DefinedRoutes = () => {
                         <Route path="/settings" element={<SettingsPage />} />
                         <Route path="/privacy" element={<PrivacyPage />} />
                         <Route path="/setup" element={<SetupPage />} />
+                        <Route path="/no-network" element={<NoNetworkPage />} />
                     </Routes>
                 </Suspense>
                 <Footer />

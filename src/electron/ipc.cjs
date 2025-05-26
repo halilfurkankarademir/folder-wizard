@@ -5,7 +5,10 @@ const {
     undoLastOrganise,
     openFile,
 } = require("./electron-utils/fileOrganizer.cjs");
-const { validateGeminiApiKey } = require("./electron-utils/utils.cjs");
+const {
+    validateGeminiApiKey,
+    checkNetworkConnection,
+} = require("./electron-utils/utils.cjs");
 const log = require("electron-log");
 
 // Electron store for storing user settings
@@ -180,6 +183,12 @@ async function setupIPCHandlers(mainWindow) {
         log.info("Undoing last organise operation...");
         await undoLastOrganise();
         return { success: true };
+    });
+
+    // Checks if the internet connection is available
+    ipcMain.handle("check-network-connection", async () => {
+        log.info("Checking network connection...");
+        return await checkNetworkConnection();
     });
 }
 

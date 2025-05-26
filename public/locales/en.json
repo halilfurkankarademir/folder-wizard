@@ -84,7 +84,12 @@
         "settingsButton": "Go to Settings",
         "note": "You won't be able to use Folder Wizard without a valid Gemini API key."
     },
-      
+    "noNetworkPage": {
+        "title": "No Network Connection",
+        "description": "The application could not connect to the internet. Please check your network connection and try again.",
+        "retryButton": "Retry",
+        "note": "This page is only visible in offline mode."
+    },
     "errors" : {
         "aiAnalyzerError" : "An error occurred during AI analysis.",
         "fileNotFound" : "File not found.",

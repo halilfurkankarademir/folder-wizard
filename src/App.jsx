@@ -1,18 +1,20 @@
 import { LanguageProvider } from "./context/LanguageContext";
 import { BgAnimationProvider } from "./context/BgAnimationContext";
 import { ApiKeyProvider } from "./context/ApiKeyContext";
-
 import DefinedRoutes from "./config/routes";
+import { NetworkProvider } from "./context/NetworkContext";
 
 function App() {
     return (
-        <LanguageProvider>
-            <ApiKeyProvider>
-                <BgAnimationProvider>
-                    <DefinedRoutes />
-                </BgAnimationProvider>
-            </ApiKeyProvider>
-        </LanguageProvider>
+        <NetworkProvider>
+            <LanguageProvider>
+                <ApiKeyProvider>
+                    <BgAnimationProvider>
+                        <DefinedRoutes />
+                    </BgAnimationProvider>
+                </ApiKeyProvider>
+            </LanguageProvider>
+        </NetworkProvider>
     );
 }
 

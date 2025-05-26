@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FaBookOpen, FaCog } from "react-icons/fa";
 import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
-import Logo from "../assets/images/logo.png";
+import Logo from "../../assets/images/logo.png";
 import SecondaryButton from "../../components/ui/buttons/SecondaryButton";
 import OutlineButton from "../../components/ui/buttons/OutlineButton";
 

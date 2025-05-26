@@ -84,6 +84,12 @@
         "settingsButton": "Ayarlar'a Git",
         "note": "Geçerli bir Gemini API anahtarı olmadan Folder Wizard'ı kullanamazsınız."
     },
+    "noNetworkPage": {
+        "title": "İnternet Bağlantısı Yok",
+        "description": "Uygulama internete bağlanamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
+        "retryButton": "Tekrar Dene",
+        "note": "Bu sayfa yalnızca çevrimdışı durumlarda görüntülenir."
+    },
     "errors" : {
         "aiAnalyzerError" : "AI analizinde bir hata oluştu.",
         "fileNotFound" : "Dosya bulunamadı.",
