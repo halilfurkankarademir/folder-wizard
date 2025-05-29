@@ -97,7 +97,8 @@
         "apiKeyNotFound" : "Gemini API anahtarı bulunamadı.",
         "userCancelledFolderSelection" : "Kullanıcı klasör seçimi iptal etti.",
         "somethingWentWrong" : "Hata! Bir sıkıntı oluştu.",
-        "maxFileCountExceeded" : "Maksimum dosya sayısına ulaşıldı. (100 dosya)"
+        "maxFileCountExceeded" : "Maksimum dosya sayısına ulaşıldı. (100 dosya)",
+        "fileInUse" : "Düzenlemeye çalışılan dosya kullanılıyor. Lütfen dosyayı kapatıp tekrar deneyin."
     },
     "selectFolder" : "Klasör Seç",
     "loading" : "Yükleniyor...",

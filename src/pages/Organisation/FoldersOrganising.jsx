@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaFolder, FaCheck, FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ const FoldersOrganising = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const handleClickUndo = async () => {
+    const handleClickUndo = useCallback(async () => {
         try {
             setUndoStatus("loading");
             const response = await window.electronAPI?.invoke(
@@ -21,7 +21,7 @@ const FoldersOrganising = () => {
             console.error(error);
             setUndoStatus("error");
         }
-    };
+    }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => setDone(true), 3000);

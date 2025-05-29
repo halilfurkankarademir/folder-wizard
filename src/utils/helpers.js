@@ -1,5 +1,5 @@
-import fileFormats from "./constans/fileFormats";
-import fileIcons from "./constans/fileIcons";
+import fileFormats from "./constants/fileFormats";
+import fileIcons from "./constants/fileIcons";
 
 // Detects file format based on file name
 const detectFileFormat = (fileName) => {

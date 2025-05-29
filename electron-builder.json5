@@ -13,7 +13,7 @@
         "!**/*.map",
     ],
     win: {
-        target: ["nsis", "portable"],
+        target: ["nsis"],
         icon: "src/assets/images/logo.ico",
         requestedExecutionLevel: "asInvoker",
     },

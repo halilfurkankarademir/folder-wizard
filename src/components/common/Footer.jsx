@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import links from "../../utils/constans/links";
+import links from "../../utils/constants/links";
 
 const Footer = () => {
     const { t } = useTranslation();

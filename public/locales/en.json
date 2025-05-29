@@ -97,7 +97,8 @@
         "apiKeyNotFound" : "Gemini API key not found.",
         "userCancelledFolderSelection" : "User cancelled the folder selection.",
         "somethingWentWrong" : "Error! Something went wrong.",
-        "maxFileCountExceeded" : "Maximum file count exceeded. (100 files)"
+        "maxFileCountExceeded" : "Maximum file count exceeded. (100 files)",
+        "fileInUse" : "File is currently in use which is trying to be moved. Please close the file and try again."
     },
     "selectFolder" : "Select Folder",
     "loading" : "Loading...",

@@ -1,19 +1,23 @@
 const { ipcMain, dialog, shell, safeStorage } = require("electron");
 const {
-    organiseFiles,
-    listFiles,
-    undoLastOrganise,
-    openFile,
-} = require("./electron-utils/fileOrganizer.cjs");
-const {
     validateGeminiApiKey,
     checkNetworkConnection,
-} = require("./electron-utils/utils.cjs");
+} = require("./electron-utils/utils.js");
 const log = require("electron-log");
+const path = require("path");
+const undoManager = require("./electron-utils/undoManager.js");
+const { runWorker } = require("./electron-utils/workers/runWorker.js");
+const {
+    undoLastOrganise,
+    openFile,
+    listFiles,
+} = require("./electron-utils/fileOperations.js");
 
 // Electron store for storing user settings
-const Store = require("electron-store").default;
+const Store = require("electron-store");
 const myStore = new Store();
+
+let lastFolderPath;
 
 /**
  * Initializes ipc handler functions for the application
@@ -22,14 +26,12 @@ const myStore = new Store();
 async function setupIPCHandlers(mainWindow) {
     // Window controls
     ipcMain.handle("minimize-window", () => {
-        log.info("Minimizing window...");
         if (mainWindow) {
             mainWindow.minimize();
         }
     });
 
     ipcMain.handle("toggle-fullscreen", () => {
-        log.info("Toggling fullscreen...");
         if (mainWindow) {
             if (mainWindow.isMaximized()) {
                 mainWindow.unmaximize();
@@ -40,7 +42,6 @@ async function setupIPCHandlers(mainWindow) {
     });
 
     ipcMain.handle("close-window", () => {
-        log.info("Closing window...");
         if (mainWindow) {
             mainWindow.close();
         }
@@ -50,11 +51,11 @@ async function setupIPCHandlers(mainWindow) {
     ipcMain.handle("open-folder-dialog", async () => {
         try {
             log.info("Opening folder dialog...");
-            const result = await dialog.showOpenDialog(mainWindow, {
+            const dialogResult = await dialog.showOpenDialog(mainWindow, {
                 properties: ["openDirectory"],
             });
 
-            if (result.canceled) {
+            if (dialogResult.canceled) {
                 log.info("User cancelled folder selection.");
                 return {
                     success: false,
@@ -62,22 +63,15 @@ async function setupIPCHandlers(mainWindow) {
                 };
             }
 
-            if (!result.canceled && result.filePaths.length > 0) {
-                const folderPath = result.filePaths[0];
-                const filesAndFolders = await listFiles(folderPath);
+            const folderPath = dialogResult.filePaths[0];
 
-                return {
-                    success: true,
-                    path: folderPath,
-                    data: filesAndFolders,
-                };
-            } else {
-                log.info("User cancelled folder selection.");
-                return {
-                    success: false,
-                    message: "User cancelled folder selection.",
-                };
-            }
+            const filesAndFolders = await listFiles(folderPath);
+
+            return {
+                success: true,
+                path: folderPath,
+                data: filesAndFolders,
+            };
         } catch (error) {
             log.error("Folder dialog error:", error);
             return {
@@ -87,29 +81,57 @@ async function setupIPCHandlers(mainWindow) {
         }
     });
 
-    // Organises files
+    // Organise files
     ipcMain.handle("organise-files", async (event, args) => {
         try {
-            const { files, currentPath } = args;
-            if (!files || !currentPath) {
-                log.error("Missing parameters:", { files, currentPath });
-                return {
-                    success: false,
-                    error: "Files or current path is missing",
-                    details: { files, currentPath },
-                };
+            const workerPath = path.join(
+                __dirname,
+                "./electron-utils/workers/organiseFiles.js"
+            );
+            const result = await runWorker(workerPath, args);
+
+            // Adds undo stack to undo manager (undo operation id will be the current path = args.currentPath)
+            if (result.success && result.undoStack && result.createdFolders) {
+                undoManager.addUndoStack(
+                    args.currentPath,
+                    result.undoStack,
+                    result.createdFolders
+                );
             }
 
-            const result = await organiseFiles(files, currentPath);
+            // Updates last folder path
+            lastFolderPath = args.currentPath;
 
             return result;
         } catch (error) {
             log.error("Organise files error:", error);
-            return {
-                success: false,
-                error: error.message,
-                details: { error, files, currentPath },
-            };
+            return { success: false, error: error.message };
+        }
+    });
+
+    // Undos last organise operation
+    ipcMain.handle("undo-organisation", async () => {
+        try {
+            // Gets last undo stack from undo manager
+            const undoData = undoManager.getUndoStack(lastFolderPath);
+
+            if (!undoData) {
+                return { success: false, error: "No undo data found." };
+            }
+
+            const result = await undoLastOrganise(
+                undoData.undoStack,
+                undoData.createdFolders
+            );
+
+            if (result.success) {
+                undoManager.removeUndoStack(lastFolderPath);
+            }
+
+            return result;
+        } catch (error) {
+            log.error("Undo last organise error:", error);
+            return { success: false, error: error.message };
         }
     });
 
@@ -173,16 +195,17 @@ async function setupIPCHandlers(mainWindow) {
     });
 
     // Opens files
-    ipcMain.handle("open-file", (event, filePath) => {
-        log.info(`Opening file: ${filePath}`);
-        openFile(filePath);
-    });
+    ipcMain.handle("open-file", async (event, filePath) => {
+        try {
+            log.info(`Opening file: ${filePath}`);
 
-    // Undos last organise operation
-    ipcMain.handle("undo-organisation", async () => {
-        log.info("Undoing last organise operation...");
-        await undoLastOrganise();
-        return { success: true };
+            const result = await openFile(filePath);
+
+            return result;
+        } catch (error) {
+            log.error("File open error:", error);
+            return { success: false, error: error.message };
+        }
     });
 
     // Checks if the internet connection is available

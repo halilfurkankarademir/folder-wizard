@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FaCog, FaFolder } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import MagicBackground from "../../components/effects";
@@ -6,14 +6,14 @@ import { useTranslation } from "react-i18next";
 import Logo from "../../assets/images/logo_color.png";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 
-export default function Homepage() {
+const Homepage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { t } = useTranslation();
 
     // Opens folder dialog and navigates to selected folder if success
-    const openFolderDialog = async () => {
+    const openFolderDialog = useCallback(async () => {
         if (window.electronAPI) {
             setLoading(true);
             const response = await window.electronAPI.invoke(
@@ -37,7 +37,7 @@ export default function Homepage() {
                 },
             });
         }
-    };
+    }, [navigate, t]);
 
     // Clears error message in 3 seconds after it appears
     useEffect(() => {
@@ -72,12 +72,14 @@ export default function Homepage() {
                         <span className="text-sm">{t("settings.title")}</span>
                     </button>
                 </div>
-                {error && (
+                {error ? (
                     <p className="mt-8 text-red-500 text-sm font-semibold">
                         {error}
                     </p>
-                )}
+                ) : null}
             </div>
         </div>
     );
-}
+};
+
+export default Homepage;

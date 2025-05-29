@@ -2,14 +2,15 @@ import MagicBackground from "../../components/effects";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 import { FaHome, FaExclamationTriangle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { memo, useCallback } from "react";
 
-export default function ErrorPage({ error }) {
+const ErrorPage = () => {
     const { t } = useTranslation();
 
-    const goToHomepage = () => {
+    const goToHomepage = useCallback(() => {
         window.location.href = "#/";
         window.location.reload();
-    };
+    }, []);
 
     return (
         <>
@@ -27,4 +28,6 @@ export default function ErrorPage({ error }) {
             </div>
         </>
     );
-}
+};
+
+export default memo(ErrorPage);

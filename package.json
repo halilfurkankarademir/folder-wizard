@@ -6,7 +6,7 @@
   "description": "An AI-powered folder organizer for your files",
   "private": true,
   "version": "1.0.0",
-  "main": "src/electron/main.cjs",
+  "main": "src/electron/main.js",
   "scripts": {
     "dev": "vite",
     "start": "electron .",

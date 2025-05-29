@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 export const useFileOrganization = (suggestedFileOrg) => {
     const [hasOrganised, setHasOrganised] = useState(false);
     const [groupedFiles, setGroupedFiles] = useState({});
+    const [error, setError] = useState(null);
 
     const applyChanges = async (currentPath) => {
         if (
@@ -23,11 +24,12 @@ export const useFileOrganization = (suggestedFileOrg) => {
                 }
             );
 
-            if (response?.success) {
-                setHasOrganised(true);
-            } else {
-                console.error("Organization failed:", response?.error);
+            if (response?.error) {
+                setError(response.error);
+                return;
             }
+
+            setHasOrganised(true);
         } catch (error) {
             console.error("Organization error:", error);
         }
@@ -51,5 +53,6 @@ export const useFileOrganization = (suggestedFileOrg) => {
         groupedFiles,
         applyChanges,
         setHasOrganised,
+        error,
     };
 };

@@ -3,22 +3,22 @@ import { useFileOrganization } from "../../hooks/useFileOrganization";
 import { OrganizationHeader } from "../../components/FileOrganization/OrganizationHeader";
 import { FileGroupCard } from "../../components/FileOrganization/FileGroupCard";
 import MagicBackground from "../../components/effects";
-import FoldersOrganising from "./FoldersOrganising";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const SuggestedOrganisation = () => {
     const { state } = useLocation();
-    const { suggestedFileOrg, currentPath } = state || {};
-
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const { hasOrganised, groupedFiles, applyChanges, setHasOrganised } =
+    const { suggestedFileOrg, currentPath } = state || {};
+
+    const { hasOrganised, groupedFiles, applyChanges, setHasOrganised, error } =
         useFileOrganization(suggestedFileOrg);
 
     useEffect(() => {
         if (hasOrganised) {
             navigate("/organising");
-            // Yönlendirme sonrası state'i sıfırla
             setHasOrganised(false);
         }
     }, [hasOrganised, navigate, setHasOrganised]);
@@ -26,10 +26,15 @@ const SuggestedOrganisation = () => {
     return (
         <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center py-12">
             <MagicBackground />
-            <div className="container mx-auto max-w-7xl p-4 md:p-8 pt-16 pb-12">
+            <div className="container  max-w-7xl p-4 md:p-8 pt-16 pb-12">
                 <OrganizationHeader
                     onApplyChanges={() => applyChanges(currentPath)}
                 />
+                {error ? (
+                    <div className="text-red-500 mb-4 ml-auto">
+                        {t(`errors.${error}`)}
+                    </div>
+                ) : null}
 
                 <div className="space-y-6 mb-12">
                     {Object.entries(groupedFiles).map(

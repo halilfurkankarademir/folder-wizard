@@ -193,16 +193,16 @@ const SettingsPage = () => {
                                 {t("settings.apiKeyExistsMessage")}
                             </p>
                         )}
-                        {savedMessage && (
+                        {savedMessage ? (
                             <p className="text-sm text-green-400 mt-2">
                                 {savedMessage}
                             </p>
-                        )}
-                        {errorMessage && (
+                        ) : null}
+                        {errorMessage ? (
                             <p className="text-sm text-red-500 mt-2">
                                 {errorMessage}
                             </p>
-                        )}
+                        ) : null}
                     </div>
 
                     <div>

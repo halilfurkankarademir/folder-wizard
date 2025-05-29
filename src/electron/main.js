@@ -1,7 +1,7 @@
 const { app, BrowserWindow, globalShortcut } = require("electron");
 const path = require("path");
 const log = require("electron-log");
-const { setupIPCHandlers } = require("./ipc.cjs");
+const { setupIPCHandlers } = require("./ipc.js");
 
 let mainWindow;
 
@@ -24,44 +24,60 @@ function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             allowRunningInsecureContent: false,
-            preload: path.join(__dirname, "preload.cjs"),
+            preload: path.join(__dirname, "preload.js"),
             sandbox: true,
         },
     });
 
-    if (isDev) {
-        window.loadURL("http://localhost:5173");
-    } else {
-        window.loadFile(path.join(__dirname, "../../dist/index.html"));
+    try {
+        if (isDev) {
+            window.loadURL("http://localhost:5173");
+        } else {
+            window.loadFile(path.join(__dirname, "../../dist/index.html"));
+        }
+    } catch (loadError) {
+        log.error("Failed to load the renderer:", loadError);
     }
 
     return window;
 }
 
 app.whenReady().then(() => {
-    // Creates a new browser window
-    mainWindow = createWindow();
-
-    // Maximizes the window when it is created
-    mainWindow.maximize();
-
-    // Initializes ipc handler functions
-    setupIPCHandlers(mainWindow);
-
-    // Initializes the logger
     log.initialize();
 
-    app.on("activate", () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            mainWindow = createWindow();
-        }
-    });
+    try {
+        mainWindow = createWindow();
+    } catch (error) {
+        log.error("Window creation failed:", error);
+    }
 
-    // It opens dev tools when CTRL+D pressed in development mode.
+    if (mainWindow) {
+        try {
+            mainWindow.maximize();
+        } catch (error) {
+            log.error("Window maximization failed:", error);
+        }
+    }
+
+    setupIPCHandlers(mainWindow);
+    app.setAppUserModelId("com.folderwizard.app");
+
     if (isDev) {
         globalShortcut.register("CommandOrControl+D", () => {
             mainWindow.webContents.openDevTools();
         });
+    }
+
+    if (mainWindow) {
+        mainWindow.on("closed", () => {
+            mainWindow = null;
+        });
+    }
+});
+
+app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        mainWindow = createWindow();
     }
 });
 

@@ -5,18 +5,18 @@ import { useTranslation } from "react-i18next";
 import Logo from "../../assets/images/logo.png";
 import SecondaryButton from "../../components/ui/buttons/SecondaryButton";
 import OutlineButton from "../../components/ui/buttons/OutlineButton";
+import { memo, useCallback } from "react";
 
-export default function SetupPage() {
+const SetupPage = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const handleClickTutorial = async () => {
-        const response = await window.electronAPI?.invoke(
+    const handleClickTutorial = useCallback(async () => {
+        await window.electronAPI?.invoke(
             "open-link",
             "https://ai.google.dev/gemini-api/docs/api-key"
         );
-        console.log(response);
-    };
+    }, []);
 
     return (
         <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center relative py-96 px-36">
@@ -60,4 +60,6 @@ export default function SetupPage() {
             </div>
         </div>
     );
-}
+};
+
+export default memo(SetupPage);

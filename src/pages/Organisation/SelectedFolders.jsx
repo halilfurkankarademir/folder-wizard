@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FaArrowLeft, FaMagic, FaArrowRight } from "react-icons/fa";
 import getResponseFromAI from "../../services/aiService";
 import { useLocation, useNavigate } from "react-router-dom";
-import prompts from "../../utils/constans/prompts";
+import prompts from "../../utils/constants/prompts";
 import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/LanguageContext";
 import FileListRenderer from "../../components/ui/renderers/FileListRenderer";
 
-export default function SelectedFolders() {
+const SelectedFolders = () => {
     const { t } = useTranslation();
     const { state } = useLocation();
     const navigate = useNavigate();
@@ -20,25 +20,6 @@ export default function SelectedFolders() {
     const [analyzing, setAnalyzing] = useState(true);
 
     const { activeLanguage } = useLanguage();
-
-    if (!path || !files) {
-        return (
-            <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center ">
-                <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-8 max-w-md">
-                    <p className="text-center text-lg mb-4 text-zinc-300">
-                        {t("selectedFoldersPage.unauthorizedAccess")}
-                    </p>
-                    <button
-                        onClick={() => navigate("/")}
-                        className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-all duration-300 flex items-center justify-center gap-2 mx-auto font-medium"
-                    >
-                        <FaArrowLeft />
-                        <span>{t("selectedFoldersPage.backToHomepage")}</span>
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     const analyzeWithAI = async () => {
         try {
@@ -56,10 +37,7 @@ export default function SelectedFolders() {
         }
     };
 
-    const handleAnalyzeButton = () => {
-        console.log("Handle Analyze - Path:", path);
-        console.log("Handle Analyze - New Files:", newFiles);
-
+    const handleAnalyzeButton = useCallback(() => {
         if (!path) {
             console.error("Path is undefined!");
             return;
@@ -70,10 +48,9 @@ export default function SelectedFolders() {
                 suggestedFileOrg: newFiles,
                 currentPath: path,
             };
-            console.log("Navigating with state:", state);
             navigate("/suggested", { state });
         }
-    };
+    }, [navigate, path, newFiles]);
 
     useEffect(() => {
         analyzeWithAI();
@@ -82,13 +59,13 @@ export default function SelectedFolders() {
     return (
         <div className="w-full min-h-screen py-12 bg-neutral-950 text-white flex flex-col justify-center items-center">
             {analyzing ? (
-                <div className="w-full h-screen flex flex-col justify-center items-center text-white">
+                <>
                     <MagicBackground />
                     <FaMagic className="animate-spin text-3xl mb-4 text-purple-500" />
                     <h2 className="text-xl font-light animate-pulse">
                         {t("selectedFoldersPage.analyzingFiles")}
                     </h2>
-                </div>
+                </>
             ) : (
                 <div className="container mx-auto max-w-7xl p-4 md:p-8 pt-16">
                     <MagicBackground />
@@ -134,11 +111,11 @@ export default function SelectedFolders() {
                     </div>
 
                     {/* Error Message */}
-                    {error && (
+                    {error ? (
                         <div className="mb-4 p-3 bg-red-900/20 border border-red-800/30 rounded-lg text-red-400">
                             {error}
                         </div>
-                    )}
+                    ) : null}
 
                     {/* Files List */}
                     <div className="bg-zinc-900/40 rounded-xl border border-zinc-800 p-4 mb-6">
@@ -165,4 +142,6 @@ export default function SelectedFolders() {
             )}
         </div>
     );
-}
+};
+
+export default SelectedFolders;

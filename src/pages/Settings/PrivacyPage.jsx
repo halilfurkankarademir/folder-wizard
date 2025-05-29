@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import MagicBackground from "../../components/effects";
+import { memo } from "react";
 
-export default function PrivacyPage() {
+const PrivacyPage = () => {
     const { t } = useTranslation();
 
     return (
@@ -98,4 +99,6 @@ export default function PrivacyPage() {
             </div>
         </div>
     );
-}
+};
+
+export default memo(PrivacyPage);

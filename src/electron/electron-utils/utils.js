@@ -1,5 +1,8 @@
+const { Worker } = require("worker_threads");
 const log = require("electron-log");
 const dns = require("dns");
+const fs = require("fs-extra");
+const path = require("path");
 
 /**
  * Checks if the provided Gemini API key is valid
@@ -48,4 +51,52 @@ async function checkNetworkConnection() {
     }
 }
 
-module.exports = { validateGeminiApiKey, checkNetworkConnection };
+/**
+ * Checks if a file is in use
+ * @param {string} filePath - Path of the file to check
+ * @returns {Promise<boolean>} - True if the file is in use, false otherwise
+ */
+async function checkIfFileInUse(filePath) {
+    try {
+        const fileHandle = await fs.open(filePath, "r+");
+        await fs.close(fileHandle);
+        return false;
+    } catch (error) {
+        if (error.code === "EBUSY" || error.code === "EACCES") {
+            log.error(`File is in use: ${filePath}`);
+            return true;
+        }
+    }
+}
+
+/**
+ * Checks if a directory is in use recursively
+ * @param {string} dirPath - Path of the directory to check
+ * @returns {Promise<boolean>} - True if the directory is in use, false otherwise
+ */
+async function checkIfFileInUseRecursively(dirPath) {
+    const files = await fs.readdir(dirPath);
+    let anyFilesInUse = false;
+
+    for (const file of files) {
+        const filePath = path.join(dirPath, file);
+        const stat = await fs.stat(filePath);
+
+        if (stat.isDirectory()) {
+            if (await checkIfFileInUseRecursively(filePath)) {
+                anyFilesInUse = true;
+            }
+        } else if (stat.isFile()) {
+            if (await checkIfFileInUse(filePath)) {
+                anyFilesInUse = true;
+            }
+        }
+    }
+    return anyFilesInUse;
+}
+
+module.exports = {
+    validateGeminiApiKey,
+    checkNetworkConnection,
+    checkIfFileInUseRecursively,
+};
