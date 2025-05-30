@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { FaArrowLeft, FaMagic, FaArrowRight } from "react-icons/fa";
+import { FaMagic, FaArrowRight } from "react-icons/fa";
 import getResponseFromAI from "../../services/aiService";
 import { useLocation, useNavigate } from "react-router-dom";
 import prompts from "../../utils/constants/prompts";
-import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/LanguageContext";
 import FileListRenderer from "../../components/ui/renderers/FileListRenderer";
@@ -57,10 +56,9 @@ const SelectedFolders = () => {
     }, []);
 
     return (
-        <div className="w-full min-h-screen py-12 bg-neutral-950 text-white flex flex-col justify-center items-center">
+        <div className="w-full min-h-screen py-12 bg-black text-white flex flex-col justify-center items-center">
             {analyzing ? (
                 <>
-                    <MagicBackground />
                     <FaMagic className="animate-spin text-3xl mb-4 text-purple-500" />
                     <h2 className="text-xl font-light animate-pulse">
                         {t("selectedFoldersPage.analyzingFiles")}
@@ -68,7 +66,6 @@ const SelectedFolders = () => {
                 </>
             ) : (
                 <div className="container mx-auto max-w-7xl p-4 md:p-8 pt-16">
-                    <MagicBackground />
                     {/* Header */}
                     <div className="mt-4">
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">

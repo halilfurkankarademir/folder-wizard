@@ -1,35 +1,25 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import MagicBackground from "../../components/effects";
 import { useLanguage } from "../../context/LanguageContext";
-import { useBgAnimation } from "../../context/BgAnimationContext";
 import { useApiKey } from "../../context/ApiKeyContext";
-import { FaLanguage, FaPaintBrush, FaKey, FaInfoCircle } from "react-icons/fa";
+import { FaLanguage, FaKey, FaInfoCircle } from "react-icons/fa";
 
 const SettingsPage = () => {
     const { t, i18n } = useTranslation();
 
     const [language, setLanguage] = useState(i18n.language);
-    const [animatedBackground, setAnimatedBackground] = useState(true);
     const [apiKeyInput, setApiKeyInput] = useState("");
     const [savedMessage, setSavedMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [storedApiKeyExists, setStoredApiKeyExists] = useState(false);
 
     const { setActiveLanguage } = useLanguage();
-    const { setIsBgAnimationActive } = useBgAnimation();
     const { setApiKey } = useApiKey();
 
     const handleLanguageChange = (newLang) => {
         setLanguage(newLang);
         setActiveLanguage(newLang);
         i18n.changeLanguage(newLang);
-    };
-
-    const handleChangeBackgroundAnimation = (newValue) => {
-        localStorage.setItem("animatedBackground", newValue);
-        setAnimatedBackground(newValue);
-        setIsBgAnimationActive(newValue);
     };
 
     const handleSaveApiKey = async () => {
@@ -83,16 +73,11 @@ const SettingsPage = () => {
     };
 
     useEffect(() => {
-        const storedBackground = localStorage.getItem("animatedBackground");
-        if (storedBackground) {
-            setAnimatedBackground(storedBackground === "true");
-        }
         getApiKeyFromStorage();
     }, []);
 
     return (
-        <div className="w-full min-h-screen p-12 bg-neutral-950 text-white flex flex-col justify-center items-center">
-            <MagicBackground />
+        <div className="w-full min-h-screen p-12 bg-black text-white flex flex-col justify-center items-center">
             <div className="container mx-auto max-w-7xl p-4 md:p-8 pt-16 pb-12">
                 <div className="bg-zinc-900/40 rounded-xl border border-zinc-800 p-6 max-w-2xl mx-auto">
                     <h1 className="text-2xl font-light mb-6">
@@ -124,39 +109,6 @@ const SettingsPage = () => {
                                 }`}
                             >
                                 English
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="mb-6">
-                        <h2 className="text-lg font-medium mb-3 flex items-center gap-2">
-                            <FaPaintBrush className="text-purple-400" />
-                            {t("settings.backgroundAnimation")}
-                        </h2>
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() =>
-                                    handleChangeBackgroundAnimation(true)
-                                }
-                                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                                    animatedBackground === true
-                                        ? "bg-purple-600 text-white"
-                                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-                                }`}
-                            >
-                                {t("settings.on")}
-                            </button>
-                            <button
-                                onClick={() =>
-                                    handleChangeBackgroundAnimation(false)
-                                }
-                                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                                    animatedBackground === false
-                                        ? "bg-purple-600 text-white"
-                                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-                                }`}
-                            >
-                                {t("settings.off")}
                             </button>
                         </div>
                     </div>

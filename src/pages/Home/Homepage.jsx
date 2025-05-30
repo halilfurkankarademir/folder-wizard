@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { FaCog, FaFolder } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
 import Logo from "../../assets/images/logo_color.png";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
@@ -47,8 +46,7 @@ const Homepage = () => {
     }, [error]);
 
     return (
-        <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center relative overflow-hidden">
-            <MagicBackground />
+        <div className="w-full h-screen bg-black text-white flex flex-col justify-center items-center relative overflow-hidden">
             <div className="z-10 text-center px-10 max-w-md">
                 <div className="mb-6">
                     <img src={Logo} alt="" className="w-64 h-64 mx-auto " />

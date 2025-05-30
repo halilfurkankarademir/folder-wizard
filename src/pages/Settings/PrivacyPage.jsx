@@ -1,13 +1,11 @@
 import { useTranslation } from "react-i18next";
-import MagicBackground from "../../components/effects";
 import { memo } from "react";
 
 const PrivacyPage = () => {
     const { t } = useTranslation();
 
     return (
-        <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col items-center relative overflow-hidden py-24 px-4">
-            <MagicBackground />
+        <div className="w-full min-h-screen bg-black text-white flex flex-col items-center relative overflow-hidden py-24 px-4">
             <div className="z-10 w-full max-w-5xl px-4 text-left">
                 <div className="mb-8 text-center">
                     <h1

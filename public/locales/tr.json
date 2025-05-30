@@ -37,10 +37,7 @@
         "apiKeySaveUnexpectedError": "API anahtarı kaydederken bir hata oluştu!",
         "apiKeyDeleteError": "API anahtarı silerken bir hata oluştu!",
         "about": "Hakkında",
-        "copyright": "© 2025 Folder Wizard",
-        "backgroundAnimation": "Arkaplan Animasyonu",
-        "on" : "Açık",
-        "off" : "Kapalı"
+        "copyright": "© 2025 Folder Wizard"
     },
     "privacyPage": {
         "title": "Gizlilik Politikası",

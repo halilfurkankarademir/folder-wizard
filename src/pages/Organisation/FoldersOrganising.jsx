@@ -29,8 +29,8 @@ const FoldersOrganising = () => {
     }, []);
 
     return (
-        <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center p-8">
-            <div className="max-w-2xl w-full bg-neutral-900 rounded-2xl p-8 shadow-2xl border border-neutral-800">
+        <div className="w-full min-h-screen bg-black text-white flex flex-col justify-center items-center p-8">
+            <div className="max-w-2xl w-full bg-black rounded-2xl p-8 shadow-2xl border border-neutral-800">
                 {!done ? (
                     <div className="flex flex-col items-center space-y-8">
                         <div className="relative">

@@ -37,10 +37,7 @@
         "apiKeySaveUnexpectedError": "An error occurred while saving the API key!",
         "apiKeyDeleteError": "An error occurred while deleting the API key!",
         "about": "About",
-        "copyright": "© 2025 Folder Wizard",
-        "backgroundAnimation": "Background Animation",
-        "on" : "On",
-        "off" : "Off"
+        "copyright": "© 2025 Folder Wizard"
     },
     "privacyPage": {
         "title": "Privacy Policy",

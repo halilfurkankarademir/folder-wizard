@@ -1,5 +1,4 @@
 import { FaWifi, FaRedo } from "react-icons/fa";
-import MagicBackground from "../../components/effects";
 import { useTranslation } from "react-i18next";
 import Logo from "../../assets/images/logo.png";
 import SecondaryButton from "../../components/ui/buttons/SecondaryButton";
@@ -14,8 +13,7 @@ const NoNetworkPage = () => {
     }, []);
 
     return (
-        <div className="w-full h-screen bg-neutral-950 text-white flex flex-col justify-center items-center relative py-96 px-36">
-            <MagicBackground />
+        <div className="w-full h-screen bg-black text-white flex flex-col justify-center items-center relative py-96 px-36">
             <div className="bg-zinc-900/40 backdrop-blur-md border border-zinc-800 rounded-3xl py-12 px-8 max-w-3xl shadow-xl text-center">
                 <div className="flex justify-center mb-6">
                     <img src={Logo} alt="Logo" className="w-20 h-20" />

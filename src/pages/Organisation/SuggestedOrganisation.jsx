@@ -2,7 +2,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useFileOrganization } from "../../hooks/useFileOrganization";
 import { OrganizationHeader } from "../../components/FileOrganization/OrganizationHeader";
 import { FileGroupCard } from "../../components/FileOrganization/FileGroupCard";
-import MagicBackground from "../../components/effects";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -24,8 +23,7 @@ const SuggestedOrganisation = () => {
     }, [hasOrganised, navigate, setHasOrganised]);
 
     return (
-        <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center py-12">
-            <MagicBackground />
+        <div className="w-full min-h-screen bg-black text-white flex flex-col justify-center items-center py-12">
             <div className="container  max-w-7xl p-4 md:p-8 pt-16 pb-12">
                 <OrganizationHeader
                     onApplyChanges={() => applyChanges(currentPath)}
